@@ -85,10 +85,10 @@
     </mailingLists>
 
     <scm>
-        <connection>scm:git:git://git.apache.org/atlas.git</connection>
-        <developerConnection>scm:git:https://git-wip-us.apache.org/repos/asf/atlas.git</developerConnection>
+        <connection>scm:git:git@github.com:zenaptix-lab/atlas.git</connection>
+        <developerConnection>scm:git:https://github.com/zenaptix-lab/atlas.git</developerConnection>
         <tag>HEAD</tag>
-        <url>https://github.com/apache/atlas.git</url>
+        <url>https://github.com/zenaptix-lab/atlas</url>
     </scm>
 
     <developers>
@@ -822,6 +822,24 @@
             <id>typesafe</id>
             <name>Typesafe Repository</name>
             <url>http://repo.typesafe.com/typesafe/releases/</url>
+        </repository>
+        <repository>
+            <id>zenAptix-release-local</id>
+            <name>zenAptix Release Repository</name>
+            <url>https://artifactory-m-jenkins-port.apps.zenaptix.net/artifactory/libs-release-local/</url>
+            <layout>default</layout>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>zenAptix-snapshot-local</id>
+            <name>zenAptix Snapshot Repository</name>
+            <url>https://artifactory-m-jenkins-port.apps.zenaptix.net/artifactory/libs-snapshot-local/</url>
+            <layout>default</layout>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
         </repository>
     </repositories>
 
