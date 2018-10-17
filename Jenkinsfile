@@ -110,8 +110,8 @@ pipeline {
             print "Building Apache Atlas"
                 script{
                     sh """export MAVEN_OPTS="-Xms2g -Xmx2g" \
-                          mvn clean -DskipTests install \
-                          mvn clean -DskipTests package -Pdist"""
+                          mvn clean -DskipTests -Drat.skip=true install \
+                          mvn clean -DskipTests -Drat.skip=true package -Pdist"""
                 }
             }
         }
@@ -124,7 +124,7 @@ pipeline {
             steps {
                 print "Publishing Artifacts"
                 script{
-                    sh 'mvn deploy -Dmaven.test.skip=true'
+                    sh 'mvn deploy -Dmaven.test.skip=true -Drat.skip=true'
                 }
             }
         }
