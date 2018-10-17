@@ -32,9 +32,8 @@ pipeline {
                     // Get jenkins build information
                     env.BUILD_VERSION = VersionNumber(versionNumberString: '${BUILD_YEAR}-${BUILD_MONTH, XX}-${BUILD_NUMBER}')
 
-                    // Get source code version from version.sbt
                     env.SRC_VERSION = sh( script: '''
-                           tail -n 1 version.sbt | awk 'NF>1{print $NF}' | tr -d '"'
+                            cat pom.xml | grep "^    <version>.*</version>$" | awk -F'[><]' '{print $3}'
                        ''', returnStdout: true).trim()
 
                     if(!isValidVersion(env.SRC_VERSION,env.BRANCH_NAME)){
@@ -55,11 +54,11 @@ pipeline {
                         print "Jira Tag: ${env.JIRA_TAG}"
 
                         //replace version.sbt in feature build
-                        sh "echo version in ThisBuild := \\\"${getFeatureOrBugJarTag("${env.SRC_VERSION}","${env.JIRA_TAG}")}\\\" > version.sbt"
+                        sh """mvn versions:set -DnewVersion=${getFeatureOrBugJarTag("${env.SRC_VERSION}","${env.JIRA_TAG}")}"""
 
                         // Update SRC_VERSION because of change
                         env.SRC_VERSION = sh( script: '''
-                           tail -n 1 version.sbt | awk 'NF>1{print $NF}' | tr -d '"'
+                            cat pom.xml | grep "^    <version>.*</version>$" | awk -F'[><]' '{print $3}'
                        ''', returnStdout: true).trim()
 
                     } else if (isValidBranch(env.BRANCH_NAME)) {
@@ -105,12 +104,11 @@ pipeline {
             }
 
         }
+
         stage('Build Artifacts') {
             steps {
-            print "Building Apache Atlas"
                 script{
-                    sh """export MAVEN_OPTS="-Xms2g -Xmx2g" \
-                          mvn clean -DskipTests -Drat.skip=true install \
+                    sh """mvn clean -DskipTests -Drat.skip=true install \
                           mvn clean -DskipTests -Drat.skip=true package -Pdist"""
                 }
             }
@@ -141,8 +139,8 @@ pipeline {
                 sh "git config remote.origin.fetch +refs/heads/*:refs/remotes/origin/*"
                 sh "git config branch.${env.BRANCH_NAME}.remote origin"
                 sh "git config branch.${env.BRANCH_NAME}.merge refs/heads/${env.BRANCH_NAME}"
-                print "Starting sbt-release"
-                sh "sbt \"set releaseVersionBump := sbtrelease.Version.Bump.${convertSemanticToSbt(env.RELEASE_SCOPE)}\" \"release cross with-defaults\""
+                print "Starting mvn release"
+                mvnCustomRelease(env.RELEASE_SCOPE)
             }
         }
     }
@@ -168,18 +166,6 @@ def getFeatureOrBugJarTag(srcVersion, jiraTag) {
 def srcVersionWithoutSnapshot(srcVersion) {
     def removeSnap = $/echo ${srcVersion} | cut -d '-' -f1/$
     return sh(returnStdout:true, script:removeSnap).trim()
-}
-
-// Convert Semantic Release to Sbt Release
-def convertSemanticToSbt(releaseScope) {
-
-    sbtReleaseBump = releaseScope
-
-    if(releaseScope == "Patch"){
-        sbtReleaseBump = "Bugfix"
-    }
-
-    return sbtReleaseBump
 }
 
 // Check if provided branch is a feature branch
@@ -266,4 +252,22 @@ def isValidVersion(srcVersion,branchName){
     }
 
     return isValid
+}
+
+// Maven release with version bump
+def mvnCustomRelease(releaseScope){
+
+  if(releaseScope == "Major"){
+    sh 'mvn build-helper:parse-version release:prepare -B -Darguments=\\"-Dmaven.test.skip=true\\" -DdevelopmentVersion=\\${parsedVersion.nextMajorVersion}.0.0-SNAPSHOT'
+  }else if(releaseScope == "Minor"){
+    sh 'mvn build-helper:parse-version release:prepare -B -Darguments=\\"-Dmaven.test.skip=true\\" -DdevelopmentVersion=\\${parsedVersion.majorVersion}.\\${parsedVersion.nextMinorVersion}.0-SNAPSHOT'
+  }else if(releaseScope == "Patch"){
+    sh 'mvn build-helper:parse-version release:prepare -B -Darguments=\\"-Dmaven.test.skip=true\\" -DdevelopmentVersion=\\${parsedVersion.majorVersion}.\\${parsedVersion.minorVersion}.\\${parsedVersion.nextIncrementalVersion}-SNAPSHOT'
+  }else if(releaseScope == "Nano"){
+    sh 'mvn build-helper:parse-version release:prepare -B -Darguments=\\"-Dmaven.test.skip=true\\"'
+  }
+
+  sh 'mvn -B -Darguments=\\"-Dmaven.test.skip=true\\" release:perform'
+  sh "git push origin --tags"
+  sh "git push origin"
 }
