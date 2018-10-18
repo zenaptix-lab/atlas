@@ -122,7 +122,7 @@ pipeline {
             steps {
                 print "Publishing Artifacts"
                 script{
-                    sh 'mvn deploy -Dmaven.test.skip=true -Drat.skip=true'
+                    sh 'mvn deploy -DskipTests -Drat.skip=true'
                 }
             }
         }
