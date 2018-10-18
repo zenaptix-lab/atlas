@@ -2238,6 +2238,29 @@
                     <skipAssembly>true</skipAssembly>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.jfrog.buildinfo</groupId>
+                <artifactId>artifactory-maven-plugin</artifactId>
+                <version>2.6.1</version>
+                <inherited>false</inherited>
+                <executions>
+                    <execution>
+                        <id>build-info</id>
+                        <goals>
+                            <goal>publish</goal>
+                        </goals>
+                        <configuration>
+                            <publisher>
+                                <contextUrl>https://artifactory-m-jenkins-port.apps.zenaptix.net/artifactory</contextUrl>
+                                <username>${artifactory-username}</username>
+                                <password>${artifactory-password}</password>
+                                <snapshotRepoKey>libs-snapshot-local</snapshotRepoKey>
+                                <repoKey>libs-release-local</repoKey>
+                            </publisher>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 </project>
