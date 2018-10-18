@@ -751,6 +751,10 @@
         <testng.version>6.9.4</testng.version>
         <joda-time.version>2.10</joda-time.version>
         <jersey-spring.version>1.19.4</jersey-spring.version>
+
+        <!--arifactory username and password for maven publishing purposes-->
+        <artifactory-username>set-in-jenkins-settings-xml</artifactory-username>
+        <artifactory-password>set-in-jenkins-settings-xml</artifactory-password>
     </properties>
 
     <modules>
