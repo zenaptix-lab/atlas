@@ -24,7 +24,6 @@
         <groupId>org.apache</groupId>
         <artifactId>apache</artifactId>
         <version>17</version>
-        <relativePath>./apache-17.pom</relativePath> <!-- parent aggregator -->
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -90,6 +89,19 @@
         <tag>HEAD</tag>
         <url>https://github.com/zenaptix-lab/atlas</url>
     </scm>
+
+    <distributionManagement>
+        <repository>
+            <id>zenAptix-release-local</id>
+            <name>zenAptix Release Repository</name>
+            <url>https://artifactory-m-jenkins-port.apps.zenaptix.net/artifactory/libs-release-local/</url>
+        </repository>
+        <snapshotRepository>
+            <id>zenAptix-snapshot-local</id>
+            <name>zenAptix Snapshot Repository</name>
+            <url>https://artifactory-m-jenkins-port.apps.zenaptix.net/artifactory/libs-snapshot-local/</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <developers>
         <developer>
