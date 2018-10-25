@@ -794,6 +794,14 @@
 
     <repositories>
         <repository>
+            <id>project.local</id>
+            <name>local maven repo</name>
+            <url>$HOME/.m2/repository</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
             <id>central</id>
             <url>http://repo1.maven.org/maven2</url>
             <snapshots>
