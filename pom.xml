@@ -92,11 +92,6 @@
 
     <distributionManagement>
         <repository>
-            <id>project.local</id>
-            <name>local maven repo</name>
-            <url>/var/lib/jenkins/.m2/repository</url>
-        </repository>
-        <repository>
             <id>zenAptix-release-local</id>
             <name>zenAptix Release Repository</name>
             <url>https://artifactory-m-jenkins-port.apps.zenaptix.net/artifactory/libs-release-local/</url>
@@ -760,6 +755,8 @@
         <!--arifactory username and password for maven publishing purposes-->
         <artifactory-username>set-in-jenkins-settings-xml</artifactory-username>
         <artifactory-password>set-in-jenkins-settings-xml</artifactory-password>
+        <localRepository>/var/lib/jenkins/.m2/repository</localRepository>
+
     </properties>
 
     <modules>
@@ -798,14 +795,14 @@
     </modules>
 
     <repositories>
-        <repository>
-            <id>project.local</id>
-            <name>local maven repo</name>
-            <url>/var/lib/jenkins/.m2/repository</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
+        <!--<repository>-->
+            <!--<id>project.local</id>-->
+            <!--<name>local maven repo</name>-->
+            <!--<url>/var/lib/jenkins/.m2/repository</url>-->
+            <!--<snapshots>-->
+                <!--<enabled>true</enabled>-->
+            <!--</snapshots>-->
+        <!--</repository>-->
         <repository>
             <id>central</id>
             <url>http://repo1.maven.org/maven2</url>
