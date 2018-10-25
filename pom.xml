@@ -796,7 +796,7 @@
         <repository>
             <id>project.local</id>
             <name>local maven repo</name>
-            <url>$HOME/.m2/repository</url>
+            <url>/var/lib/jenkins/.m2/repository</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
