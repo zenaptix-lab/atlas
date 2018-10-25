@@ -648,6 +648,10 @@
 
     </profiles>
 
+    <settings>
+        <localRepository>/var/lib/jenkins/.m2/repository</localRepository>
+    </settings>
+
     <properties>
         <!-- platform encoding override -->
         <skipTests>false</skipTests>
@@ -755,7 +759,6 @@
         <!--arifactory username and password for maven publishing purposes-->
         <artifactory-username>set-in-jenkins-settings-xml</artifactory-username>
         <artifactory-password>set-in-jenkins-settings-xml</artifactory-password>
-        <localRepository>/var/lib/jenkins/.m2/repository</localRepository>
 
     </properties>
 
