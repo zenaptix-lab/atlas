@@ -92,6 +92,11 @@
 
     <distributionManagement>
         <repository>
+            <id>project.local</id>
+            <name>local maven repo</name>
+            <url>/var/lib/jenkins/.m2/repository</url>
+        </repository>
+        <repository>
             <id>zenAptix-release-local</id>
             <name>zenAptix Release Repository</name>
             <url>https://artifactory-m-jenkins-port.apps.zenaptix.net/artifactory/libs-release-local/</url>
