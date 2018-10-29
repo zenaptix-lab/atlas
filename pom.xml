@@ -820,6 +820,9 @@
         <repository>
             <id>apache-staging</id>
             <url>https://repository.apache.org/content/groups/staging/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
         <repository>
             <id>default</id>
@@ -840,11 +843,17 @@
             <id>repository.jboss.org-public</id>
             <name>JBoss repository</name>
             <url>https://repository.jboss.org/nexus/content/groups/public</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
         <repository>
             <id>typesafe</id>
             <name>Typesafe Repository</name>
             <url>http://repo.typesafe.com/typesafe/releases/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
         <repository>
             <id>zenAptix-release-local</id>
