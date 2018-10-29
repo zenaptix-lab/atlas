@@ -869,6 +869,9 @@
             <name>zenAptix Snapshot Repository</name>
             <url>https://artifactory-m-jenkins-port.apps.zenaptix.net/artifactory/libs-snapshot-local/</url>
             <layout>default</layout>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
             <releases>
                 <enabled>false</enabled>
             </releases>
