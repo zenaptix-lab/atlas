@@ -794,13 +794,13 @@
     </modules>
 
     <repositories>
-        <repository>
-            <id>central</id>
-            <url>http://repo1.maven.org/maven2</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
+        <!--<repository>-->
+            <!--<id>central</id>-->
+            <!--<url>http://repo1.maven.org/maven2</url>-->
+            <!--<snapshots>-->
+                <!--<enabled>false</enabled>-->
+            <!--</snapshots>-->
+        <!--</repository>-->
         <repository>
             <id>hortonworks.repo</id>
             <url>http://repo.hortonworks.com/content/repositories/releases</url>
@@ -809,22 +809,22 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
-        <repository>
-            <id>apache.snapshots.repo</id>
-            <url>https://repository.apache.org/content/groups/snapshots</url>
-            <name>Apache Snapshots Repository</name>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>apache-staging</id>
-            <url>https://repository.apache.org/content/groups/staging/</url>
-        </repository>
-        <repository>
-            <id>default</id>
-            <url>https://repository.apache.org/content/groups/public/</url>
-        </repository>
+        <!--<repository>-->
+            <!--<id>apache.snapshots.repo</id>-->
+            <!--<url>https://repository.apache.org/content/groups/snapshots</url>-->
+            <!--<name>Apache Snapshots Repository</name>-->
+            <!--<snapshots>-->
+                <!--<enabled>true</enabled>-->
+            <!--</snapshots>-->
+        <!--</repository>-->
+        <!--<repository>-->
+            <!--<id>apache-staging</id>-->
+            <!--<url>https://repository.apache.org/content/groups/staging/</url>-->
+        <!--</repository>-->
+        <!--<repository>-->
+            <!--<id>default</id>-->
+            <!--<url>https://repository.apache.org/content/groups/public/</url>-->
+        <!--</repository>-->
         <repository>
             <id>java.net-Public</id>
             <name>Maven Java Net Snapshots and Releases</name>
