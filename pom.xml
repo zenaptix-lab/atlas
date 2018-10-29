@@ -824,6 +824,9 @@
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
         </repository>
         <repository>
             <id>maven.local</id>
@@ -832,6 +835,9 @@
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
         </repository>
         <!--<repository>-->
             <!--<id>apache-staging</id>-->
