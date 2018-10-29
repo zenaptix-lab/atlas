@@ -817,14 +817,14 @@
                 <!--<enabled>false</enabled>-->
             <!--</snapshots>-->
         <!--</repository>-->
-        <!--<repository>-->
-            <!--<id>apache.snapshots</id>-->
-            <!--<name>Apache snapshots</name>-->
-            <!--<url>http://repository.apache.org/snapshots</url>-->
-            <!--<snapshots>-->
-                <!--<enabled>false</enabled>-->
-            <!--</snapshots>-->
-        <!--</repository>-->
+        <repository>
+            <id>apache.snapshots</id>
+            <name>Apache snapshots</name>
+            <url>http://repository.apache.org/snapshots</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
         <!--<repository>-->
             <!--<id>apache-staging</id>-->
             <!--<url>https://repository.apache.org/content/groups/staging/</url>-->
