@@ -109,7 +109,7 @@ pipeline {
             steps {
                 script{
                     sh """mvn -DskipTests -Drat.skip=true -X install"""
-                    sh """mvn clean -DskipTests -Drat.skip=true package -Pdist"""
+                    sh """mvn -DskipTests -Drat.skip=true package -Pdist"""
                 }
             }
         }
