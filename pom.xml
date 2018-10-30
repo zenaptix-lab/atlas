@@ -828,17 +828,17 @@
                 <enabled>false</enabled>
             </releases>
         </repository>
-        <repository>
-            <id>maven.local</id>
-            <name>maven local snapshots</name>
-            <url>file://var/lib/jenkins/.m2/repository</url>
+        <!--<repository>-->
+            <!--<id>maven.local</id>-->
+            <!--<name>maven local snapshots</name>-->
+            <!--<url>file://var/lib/jenkins/.m2/repository</url>-->
             <!--<snapshots>-->
                 <!--<enabled>false</enabled>-->
             <!--</snapshots>-->
             <!--<releases>-->
                 <!--<enabled>false</enabled>-->
             <!--</releases>-->
-        </repository>
+        <!--</repository>-->
         <!--<repository>-->
             <!--<id>apache-staging</id>-->
             <!--<url>https://repository.apache.org/content/groups/staging/</url>-->
