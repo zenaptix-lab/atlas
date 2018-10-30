@@ -817,17 +817,17 @@
                 <!--<enabled>false</enabled>-->
             <!--</snapshots>-->
         <!--</repository>-->
-        <repository>
-            <id>apache.snapshots</id>
-            <name>Apache snapshots</name>
-            <url>http://repository.apache.org/snapshots</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-        </repository>
+        <!--<repository>-->
+            <!--<id>apache.snapshots</id>-->
+            <!--<name>Apache snapshots</name>-->
+            <!--<url>http://repository.apache.org/snapshots</url>-->
+            <!--<snapshots>-->
+                <!--<enabled>false</enabled>-->
+            <!--</snapshots>-->
+            <!--<releases>-->
+                <!--<enabled>false</enabled>-->
+            <!--</releases>-->
+        <!--</repository>-->
         <!--<repository>-->
             <!--<id>maven.local</id>-->
             <!--<name>maven local snapshots</name>-->
