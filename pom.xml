@@ -1927,8 +1927,11 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
                     <configuration>
-                        <skip>true</skip>
+                        <skip>false</skip>
                     </configuration>
+                    <goals>
+                        <goal>test-jar</goal>
+                    </goals>
                 </plugin>
             </plugins>
         </pluginManagement>
