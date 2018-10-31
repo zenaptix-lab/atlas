@@ -108,8 +108,8 @@ pipeline {
         stage('Build Artifacts') {
             steps {
                 script{
-                    sh """mvn -DskipTests=true -Drat.skip=true -X install"""
-                    sh """mvn -DskipTests=true -Drat.skip=true package -Pdist"""
+                    sh """mvn clean -DskipTests -Drat.skip=true -X install"""
+                    sh """mvn clean -DskipTests -Drat.skip=true package -Pdist"""
                 }
             }
         }
