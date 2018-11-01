@@ -148,6 +148,7 @@ pipeline {
         always {
             // print 'Cleaning up Workspace'
             // deleteDir()
+            print 'Not cleaning workspace.'
         }
     }
 }
