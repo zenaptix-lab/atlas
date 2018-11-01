@@ -146,8 +146,8 @@ pipeline {
     }
     post {
         always {
-            print 'Cleaning up Workspace'
-            deleteDir()
+            // print 'Cleaning up Workspace'
+            // deleteDir()
         }
     }
 }
