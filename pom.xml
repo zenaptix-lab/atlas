@@ -2301,7 +2301,7 @@
                             <goal>deploy-file</goal>
                         </goals>
                         <configuration>
-                            <file>distro/target/apache-atlas-2.0.0-SNAPSHOT-bin.tar.gz</file>
+                            <file>distro/target/apache-atlas-2.0.0-DG-10-SNAPSHOT-bin.tar.gz</file>
                             <url>https://artifactory-m-jenkins-port.apps.zenaptix.net/artifactory</url>
                             <groupId>org.apache.atlas</groupId>
                             <artifactId>atlas-distro</artifactId>
