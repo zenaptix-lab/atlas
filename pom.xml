@@ -2307,7 +2307,7 @@
                             <artifactId>atlas-distro</artifactId>
                             <version>2.0.0-SNAPSHOT</version>
                             <packaging>tar.gz</packaging>
-                            <repositoryId>artifactory-credentials</repositoryId>
+                            <repositoryId>artifactory-m</repositoryId>
                         </configuration>
                     </execution>
                 </executions>
