@@ -756,6 +756,8 @@
         <artifactory-username>set-in-jenkins-settings-xml</artifactory-username>
         <artifactory-password>set-in-jenkins-settings-xml</artifactory-password>
 
+        <maven.deploy.skip>true</maven.deploy.skip>
+        
     </properties>
 
     <modules>
