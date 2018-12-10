@@ -755,8 +755,6 @@
         <!--arifactory username and password for maven publishing purposes-->
         <artifactory-username>set-in-jenkins-settings-xml</artifactory-username>
         <artifactory-password>set-in-jenkins-settings-xml</artifactory-password>
-
-        <maven.deploy.skip>true</maven.deploy.skip>
         
     </properties>
 
@@ -2292,9 +2290,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
-                <configuration>
-                    <deployAtEnd>true</deployAtEnd>
-                </configuration>
                 <executions>
                     <execution>
                         <id>deploy-file</id>
