@@ -123,6 +123,7 @@ pipeline {
                 print "Publishing Artifacts"
                 script{
                     sh 'mvn clean deploy -DskipTests -Drat.skip=true -e'
+                    sh 'curl -v --user ${artifactory-username}:${artifactory-password} --data-binary ${HOME}/.m2/repository/org/apache/atlas/atlas-distro/${env.BRANCH_NAME}/atlas-distro-${env.BRANCH_NAME}-bin.tar.gz -X PUT "http://artifactory-m-jenkins-port.apps.zenaptix.net/artifactory/simple/libs-snapshot-local/org/apache/atlas/atlas-distro/${env.BRANCH_NAME}/atlas-distro-${env.BRANCH_NAME}.tar.gz"'
                 }
             }
         }
