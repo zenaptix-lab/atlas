@@ -2292,10 +2292,10 @@
                 </executions>
             </plugin>
 
-            <!--<plugin>-->
-                <!--<groupId>org.apache.maven.plugins</groupId>-->
-                <!--<artifactId>maven-deploy-plugin</artifactId>-->
-                <!--<executions>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <executions>
                     <!--<execution>-->
                         <!--<id>deploy-file</id>-->
                         <!--<phase>deploy</phase>-->
@@ -2312,8 +2312,8 @@
                             <!--<repositoryId>artifactory-m</repositoryId>-->
                         <!--</configuration>-->
                     <!--</execution>-->
-                <!--</executions>-->
-            <!--</plugin>-->
+                </executions>
+            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
