@@ -78,8 +78,6 @@ atlas.graph.index.search.solr.wait-searcher=true
 
         <entity.repository.properties>atlas.EntityAuditRepository.impl=org.apache.atlas.repository.audit.HBaseBasedAuditRepository</entity.repository.properties>
 
-        <maven.deploy.skip>false</maven.deploy.skip>
-
     </properties>
 
     <profiles>
@@ -456,7 +454,7 @@ atlas.graph.index.search.solr.wait-searcher=true
                 <artifactId>maven-deploy-plugin</artifactId>
                 <version>2.7</version>
                 <configuration>
-                    <skip>false</skip>
+                    <skip>true</skip>
                 </configuration>
             </plugin>
         </plugins>

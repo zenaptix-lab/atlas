@@ -755,8 +755,6 @@
         <!--arifactory username and password for maven publishing purposes-->
         <artifactory-username>set-in-jenkins-settings-xml</artifactory-username>
         <artifactory-password>set-in-jenkins-settings-xml</artifactory-password>
-
-        <maven.deploy.skip>true</maven.deploy.skip>
         
     </properties>
 
@@ -796,29 +794,40 @@
     </modules>
 
     <repositories>
-        <!--<repository>-->
-            <!--<id>central</id>-->
-            <!--<url>http://repo1.maven.org/maven2</url>-->
-            <!--<snapshots>-->
-                <!--<enabled>false</enabled>-->
-            <!--</snapshots>-->
-        <!--</repository>-->
-        <!--<repository>-->
-            <!--<id>hortonworks.repo</id>-->
-            <!--<url>http://repo.hortonworks.com/content/repositories/releases</url>-->
-            <!--<name>Hortonworks Repo</name>-->
-            <!--<snapshots>-->
-                <!--<enabled>false</enabled>-->
-            <!--</snapshots>-->
-        <!--</repository>-->
-        <!--<repository>-->
-            <!--<id>apache.snapshots.repo</id>-->
-            <!--<url>https://repository.apache.org/content/groups/snapshots</url>-->
-            <!--<name>Apache Snapshots Repository</name>-->
-            <!--<snapshots>-->
-                <!--<enabled>false</enabled>-->
-            <!--</snapshots>-->
-        <!--</repository>-->
+        <repository>
+            <id>central</id>
+            <url>http://repo1.maven.org/maven2</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>hortonworks.repo</id>
+            <url>http://repo.hortonworks.com/content/repositories/releases</url>
+            <name>Hortonworks Repo</name>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>apache.snapshots.repo</id>
+            <url>https://repository.apache.org/content/groups/snapshots</url>
+            <name>Apache Snapshots Repository</name>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+
+        <repository>
+            <id>spring-repo</id>
+            <url>https://repo.spring.io/release</url>
+        </repository>
+
+        <repository>
+            <id>jcenter</id>
+            <url>https://jcenter.bintray.com/</url>
+        </repository>
+
         <repository>
             <id>apache.snapshots</id>
             <name>Apache snapshots</name>
@@ -830,55 +839,55 @@
                 <enabled>false</enabled>
             </releases>
         </repository>
-        <!--<repository>-->
-            <!--<id>maven.local</id>-->
-            <!--<name>maven local snapshots</name>-->
-            <!--<url>file://var/lib/jenkins/.m2/repository</url>-->
-            <!--<snapshots>-->
-                <!--<enabled>false</enabled>-->
-            <!--</snapshots>-->
-            <!--<releases>-->
-                <!--<enabled>false</enabled>-->
-            <!--</releases>-->
-        <!--</repository>-->
-        <!--<repository>-->
-            <!--<id>apache-staging</id>-->
-            <!--<url>https://repository.apache.org/content/groups/staging/</url>-->
-            <!--<snapshots>-->
-                <!--<enabled>false</enabled>-->
-            <!--</snapshots>-->
-        <!--</repository>-->
-        <!--<repository>-->
-            <!--<id>default</id>-->
-            <!--<url>https://repository.apache.org/content/groups/public/</url>-->
-            <!--<snapshots>-->
-                <!--<enabled>false</enabled>-->
-            <!--</snapshots>-->
-        <!--</repository>-->
-        <!--<repository>-->
-            <!--<id>java.net-Public</id>-->
-            <!--<name>Maven Java Net Snapshots and Releases</name>-->
-            <!--<url>https://maven.java.net/content/groups/public/</url>-->
-            <!--<snapshots>-->
-                <!--<enabled>false</enabled>-->
-            <!--</snapshots>-->
-        <!--</repository>-->
-        <!--<repository>-->
-            <!--<id>repository.jboss.org-public</id>-->
-            <!--<name>JBoss repository</name>-->
-            <!--<url>https://repository.jboss.org/nexus/content/groups/public</url>-->
-            <!--<snapshots>-->
-                <!--<enabled>false</enabled>-->
-            <!--</snapshots>-->
-        <!--</repository>-->
-        <!--<repository>-->
-            <!--<id>typesafe</id>-->
-            <!--<name>Typesafe Repository</name>-->
-            <!--<url>http://repo.typesafe.com/typesafe/releases/</url>-->
-            <!--<snapshots>-->
-                <!--<enabled>false</enabled>-->
-            <!--</snapshots>-->
-        <!--</repository>-->
+        <repository>
+            <id>maven.local</id>
+            <name>maven local snapshots</name>
+            <url>file://var/lib/jenkins/.m2/repository</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
+        <repository>
+            <id>apache-staging</id>
+            <url>https://repository.apache.org/content/groups/staging/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>default</id>
+            <url>https://repository.apache.org/content/groups/public/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>java.net-Public</id>
+            <name>Maven Java Net Snapshots and Releases</name>
+            <url>https://maven.java.net/content/groups/public/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>repository.jboss.org-public</id>
+            <name>JBoss repository</name>
+            <url>https://repository.jboss.org/nexus/content/groups/public</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>typesafe</id>
+            <name>Typesafe Repository</name>
+            <url>http://repo.typesafe.com/typesafe/releases/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
         <repository>
             <id>zenAptix-release-local</id>
             <name>zenAptix Release Repository</name>
@@ -1932,11 +1941,8 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
                     <configuration>
-                        <skip>false</skip>
+                        <skip>true</skip>
                     </configuration>
-                    <goals>
-                        <goal>test-jar</goal>
-                    </goals>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -1981,8 +1987,8 @@
                         <id>attach-sources</id>
                         <phase>verify</phase>
                         <goals>
-                            <goal>jar</goal>
-                            <goal>test-jar</goal>
+                            <goal>jar-no-fork</goal>
+                            <goal>test-jar-no-fork</goal>
                             <goal>generated-test-jar</goal>
                         </goals>
                     </execution>
@@ -2295,6 +2301,9 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
+                <configuration>
+                    <deployAtEnd>true</deployAtEnd>
+                </configuration>
                 <executions>
                     <!--<execution>-->
                         <!--<id>deploy-file</id>-->
@@ -2349,11 +2358,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
-                    <skip>false</skip>
+                    <skip>true</skip>
                 </configuration>
-                <goals>
-                    <goal>test-jar</goal>
-                </goals>
             </plugin>
         </plugins>
     </build>
