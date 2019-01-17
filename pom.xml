@@ -1854,9 +1854,6 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-deploy-plugin</artifactId>
                     <version>2.7</version>
-                    <configuration>
-                        <skip>true</skip>
-                    </configuration>
                 </plugin>
 
                 <plugin>
@@ -2305,22 +2302,22 @@
                     <deployAtEnd>true</deployAtEnd>
                 </configuration>
                 <executions>
-                    <!--<execution>-->
-                        <!--<id>deploy-file</id>-->
-                        <!--<phase>deploy</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>deploy-file</goal>-->
-                        <!--</goals>-->
-                        <!--<configuration>-->
-                            <!--<file>distro/target/apache-atlas-2.0.0-DG-10-SNAPSHOT-bin.tar.gz</file>-->
-                            <!--<url>https://artifactory-m-jenkins-port.apps.zenaptix.net/artifactory/libs-snapshot-local</url>-->
-                            <!--<groupId>org.apache.atlas</groupId>-->
-                            <!--<artifactId>atlas-distro</artifactId>-->
-                            <!--<version>2.0.0-DG-10-SNAPSHOT</version>-->
-                            <!--<packaging>tar.gz</packaging>-->
-                            <!--<repositoryId>artifactory-m</repositoryId>-->
-                        <!--</configuration>-->
-                    <!--</execution>-->
+                    <execution>
+                        <id>deploy-file</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>deploy-file</goal>
+                        </goals>
+                        <configuration>
+                            <file>distro/target/apache-atlas-2.0.0-DG-10-SNAPSHOT-bin.tar.gz</file>
+                            <url>https://artifactory-m-jenkins-port.apps.zenaptix.net/artifactory/libs-snapshot-local</url>
+                            <groupId>org.apache.atlas</groupId>
+                            <artifactId>atlas-distro</artifactId>
+                            <version>2.0.0-DG-10-SNAPSHOT</version>
+                            <packaging>tar.gz</packaging>
+                            <repositoryId>artifactory-m</repositoryId>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
 
