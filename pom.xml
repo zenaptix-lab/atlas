@@ -2302,20 +2302,42 @@
                     <deployAtEnd>true</deployAtEnd>
                 </configuration>
                 <executions>
+                    <!--<execution>-->
+                        <!--<id>deploy-file</id>-->
+                        <!--<phase>deploy</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>deploy-file</goal>-->
+                        <!--</goals>-->
+                        <!--<configuration>-->
+                            <!--<file>distro/target/apache-atlas-2.0.0-DG-10-SNAPSHOT-bin.tar.gz</file>-->
+                            <!--<url>https://artifactory-m-jenkins-port.apps.zenaptix.net/artifactory/libs-snapshot-local</url>-->
+                            <!--<groupId>org.apache.atlas</groupId>-->
+                            <!--<artifactId>atlas-distro</artifactId>-->
+                            <!--<version>2.0.0-DG-10-SNAPSHOT</version>-->
+                            <!--<packaging>tar.gz</packaging>-->
+                            <!--<repositoryId>artifactory-m</repositoryId>-->
+                        <!--</configuration>-->
+                    <!--</execution>-->
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>wagon-maven-plugin</artifactId>
+                <version>1.0</version>
+                <executions>
                     <execution>
-                        <id>deploy-file</id>
+                        <id>deploy-release</id>
                         <phase>deploy</phase>
                         <goals>
-                            <goal>deploy-file</goal>
+                            <goal>upload</goal>
                         </goals>
                         <configuration>
-                            <file>distro/target/apache-atlas-2.0.0-DG-10-SNAPSHOT-bin.tar.gz</file>
+                            <serverId>artifactory-m</serverId>
                             <url>https://artifactory-m-jenkins-port.apps.zenaptix.net/artifactory/libs-snapshot-local</url>
-                            <groupId>org.apache.atlas</groupId>
-                            <artifactId>atlas-distro</artifactId>
-                            <version>2.0.0-DG-10-SNAPSHOT</version>
-                            <packaging>tar.gz</packaging>
-                            <repositoryId>artifactory-m</repositoryId>
+                            <fromDir>distro/target/</fromDir>
+                            <toDir>2.0.0-DG-10-SNAPSHOT</toDir>
+                            <includes>apache-atlas-2.0.0-DG-10-SNAPSHOT-bin.tar.gz</includes>
                         </configuration>
                     </execution>
                 </executions>
