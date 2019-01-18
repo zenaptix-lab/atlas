@@ -2336,7 +2336,7 @@
                             <serverId>artifactory-m</serverId>
                             <url>https://artifactory-m-jenkins-port.apps.zenaptix.net/artifactory/libs-snapshot-local</url>
                             <fromDir>distro/target/</fromDir>
-                            <toDir>2.0.0-DG-10-SNAPSHOT</toDir>
+                            <toDir>org/apache/atlas/atlas-distro/2.0.0-DG-10-SNAPSHOT</toDir>
                             <includes>apache-atlas-2.0.0-DG-10-SNAPSHOT-bin.tar.gz</includes>
                         </configuration>
                     </execution>
