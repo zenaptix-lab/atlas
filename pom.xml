@@ -2318,8 +2318,8 @@
                             <serverId>artifactory-m</serverId>
                             <url>https://artifactory-m-jenkins-port.apps.zenaptix.net/artifactory/libs-snapshot-local</url>
                             <fromDir>distro/target/</fromDir>
-                            <toDir>org/apache/atlas/atlas-distro/${version}-${env.BRANCH_NAME}</toDir>
-                            <includes>apache-atlas-${version}-${env.BRANCH_NAME}-bin.tar.gz</includes>
+                            <toDir>org/apache/atlas/atlas-distro/${project.version}</toDir>
+                            <includes>apache-atlas-${project.version}-bin.tar.gz</includes>
                         </configuration>
                     </execution>
                 </executions>
