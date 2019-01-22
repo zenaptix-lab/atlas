@@ -108,7 +108,7 @@ pipeline {
         stage('Build Artifacts') {
             steps {
                 script{
-                    sh """mvn clean -DskipTests -Drat.skip=true install"""
+                    sh """mvn clean -DskipTests -Drat.skip=true -X install"""
                     sh """mvn clean -DskipTests -Drat.skip=true package -Pdist"""
                 }
             }
@@ -146,8 +146,9 @@ pipeline {
     }
     post {
         always {
-            print 'Cleaning up Workspace'
-            deleteDir()
+            // print 'Cleaning up Workspace'
+            // deleteDir()
+            print 'Not cleaning workspace.'
         }
     }
 }
@@ -258,16 +259,16 @@ def isValidVersion(srcVersion,branchName){
 def mvnCustomRelease(releaseScope){
 
   if(releaseScope == "Major"){
-    sh 'mvn build-helper:parse-version release:prepare -B -Darguments=\\"-Dmaven.test.skip=true\\" -DdevelopmentVersion=\\${parsedVersion.nextMajorVersion}.0.0-SNAPSHOT'
+    sh 'mvn build-helper:parse-version release:prepare -B -Darguments=\\"-DskipTests\\" -DdevelopmentVersion=\\${parsedVersion.nextMajorVersion}.0.0-SNAPSHOT'
   }else if(releaseScope == "Minor"){
-    sh 'mvn build-helper:parse-version release:prepare -B -Darguments=\\"-Dmaven.test.skip=true\\" -DdevelopmentVersion=\\${parsedVersion.majorVersion}.\\${parsedVersion.nextMinorVersion}.0-SNAPSHOT'
+    sh 'mvn build-helper:parse-version release:prepare -B -Darguments=\\"-DskipTests\\" -DdevelopmentVersion=\\${parsedVersion.majorVersion}.\\${parsedVersion.nextMinorVersion}.0-SNAPSHOT'
   }else if(releaseScope == "Patch"){
-    sh 'mvn build-helper:parse-version release:prepare -B -Darguments=\\"-Dmaven.test.skip=true\\" -DdevelopmentVersion=\\${parsedVersion.majorVersion}.\\${parsedVersion.minorVersion}.\\${parsedVersion.nextIncrementalVersion}-SNAPSHOT'
+    sh 'mvn build-helper:parse-version release:prepare -B -Darguments=\\"-DskipTests\\" -DdevelopmentVersion=\\${parsedVersion.majorVersion}.\\${parsedVersion.minorVersion}.\\${parsedVersion.nextIncrementalVersion}-SNAPSHOT'
   }else if(releaseScope == "Nano"){
-    sh 'mvn build-helper:parse-version release:prepare -B -Darguments=\\"-Dmaven.test.skip=true\\"'
+    sh 'mvn build-helper:parse-version release:prepare -B -Darguments=\\"-DskipTests\\"'
   }
 
-  sh 'mvn -B -Darguments=\\"-Dmaven.test.skip=true\\" release:perform'
+  sh 'mvn -B -Darguments=\\"-DskipTests\\" release:perform'
   sh "git push origin --tags"
   sh "git push origin"
 }

@@ -77,6 +77,7 @@ atlas.graph.index.search.solr.wait-searcher=true
         <elasticsearch.managed>false</elasticsearch.managed>
 
         <entity.repository.properties>atlas.EntityAuditRepository.impl=org.apache.atlas.repository.audit.HBaseBasedAuditRepository</entity.repository.properties>
+
     </properties>
 
     <profiles>
