@@ -251,6 +251,9 @@ def isValidVersion(srcVersion,branchName){
     }else if(env.SRC_VERSION.matches('([0-9]+.[0-9]+.[0-9]+.[0-9]+-SNAPSHOT$)') && isHotfixBranch(branchName)){
         isValid = true
     }
+    else if(env.SRC_VERSION.matches('([0-9]+.[0-9]+.[0-9])') && (isFeatureBranch(branchName)|| isBugBranch(branchName) || isMasterBranch(branchName) || isPRBranch(branchName))){
+        isValid = true
+    }
 
     return isValid
 }
