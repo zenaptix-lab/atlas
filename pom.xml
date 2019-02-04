@@ -1767,6 +1767,29 @@
             <plugins>
                 <!-- support for enforcement of maven & Java versions -->
                 <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <version>3.0</version>
+                    <executions>
+                        <execution>
+                            <id>attach-artifacts</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>attach-artifact</goal>
+                            </goals>
+                            <configuration>
+                                <artifacts>
+                                    <artifact>
+                                        <file>${project.basedir}/target/*.tar.gz</file>
+                                        <type>tar.gz</type>
+                                        <classifier>optional</classifier>
+                                    </artifact>
+                                </artifacts>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <executions>
                         <execution>
@@ -2244,7 +2267,7 @@
                                     <include>**</include>
                                 </includes>
                                 <excludes>
-                                    <exclude>distro/target/*.tar.gz</exclude>
+                                    <exclude>${project.basedir}/target/*.tar.gz</exclude>
                                 </excludes>
                             </fileset>
                         </filesets>
@@ -2322,7 +2345,7 @@
                             <url>https://artifactory-m-jenkins-port.apps.zenaptix.net/artifactory/libs-snapshot-local</url>
                             <fromDir>distro/target/</fromDir>
                             <toDir>org/apache/atlas/atlas-distro/${project.version}</toDir>
-                            <includes>apache-atlas-${project.version}-bin.tar.gz</includes>
+                            <includes>*.tar.gz</includes>
                         </configuration>
                     </execution>
                 </executions>
