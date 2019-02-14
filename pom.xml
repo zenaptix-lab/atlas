@@ -2342,7 +2342,7 @@
                         </goals>
                         <configuration>
                             <serverId>artifactory-m</serverId>
-                            <url>https://artifactory-m-jenkins-port.apps.zenaptix.net/artifactory/libs-snapshot-local</url>
+                            <url>http://artifactory-m-jenkins-port.apps.zenaptix.net/artifactory/simple/libs-snapshot-local</url>
                             <fromDir>distro/target/</fromDir>
                             <toDir>org/apache/atlas/atlas-distro/${project.version}</toDir>
                             <includes>*.tar.gz</includes>

@@ -108,8 +108,8 @@ pipeline {
         stage('Build Artifacts') {
             steps {
                 script{
-                    sh """mvn clean -DskipTests -Drat.skip=true -X install"""
-                    sh """mvn clean -DskipTests -Drat.skip=true package -Pdist"""
+                    sh """mvn -T 9 clean -DskipTests -Drat.skip=true -X install"""
+                    sh """mvn -T 9 clean -DskipTests -Drat.skip=true package -Pdist"""
                 }
             }
         }
@@ -122,7 +122,7 @@ pipeline {
             steps {
                 print "Publishing Artifacts"
                 script{
-                    sh 'mvn clean deploy -DskipTests -Drat.skip=true -e'
+                    sh 'mvn -T 9 clean deploy -DskipTests -Drat.skip=true -e'
                 }
             }
         }
@@ -146,9 +146,9 @@ pipeline {
     }
     post {
         always {
-            // print 'Cleaning up Workspace'
-            // deleteDir()
-            print 'Not cleaning workspace.'
+            print 'Cleaning up Workspace'
+            deleteDir()
+            // print 'Not cleaning workspace.'
         }
     }
 }
