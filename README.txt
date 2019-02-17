@@ -66,3 +66,15 @@ Build Process
    distro/target/apache-atlas-1.0.0-storm-hook.tar.gz
 
 4. For more details on building and running Apache Atlas, please refer to http://atlas.apache.org/InstallationSteps.html
+
+5. For updating maven versions update the main pom.xml <version> with
+
+    mvn versions:set -DnewVersion=<version>
+
+ and use
+
+    $mvn versions:update-child-modules  followed by
+    $mvn versions:commit
+
+    and to revert versions use
+    $mvn versions:revert

@@ -84,11 +84,24 @@
     </mailingLists>
 
     <scm>
-        <connection>scm:git:git://git.apache.org/atlas.git</connection>
-        <developerConnection>scm:git:https://git-wip-us.apache.org/repos/asf/atlas.git</developerConnection>
+        <connection>scm:git:git@github.com:zenaptix-lab/atlas.git</connection>
+        <developerConnection>scm:git:https://github.com/zenaptix-lab/atlas.git</developerConnection>
         <tag>HEAD</tag>
-        <url>https://github.com/apache/atlas.git</url>
+        <url>https://github.com/zenaptix-lab/atlas</url>
     </scm>
+
+    <distributionManagement>
+        <repository>
+            <id>zenAptix-release-local</id>
+            <name>zenAptix Release Repository</name>
+            <url>https://artifactory-m-jenkins-port.apps.zenaptix.net/artifactory/libs-release-local/</url>
+        </repository>
+        <snapshotRepository>
+            <id>zenAptix-snapshot-local</id>
+            <name>zenAptix Snapshot Repository</name>
+            <url>https://artifactory-m-jenkins-port.apps.zenaptix.net/artifactory/libs-snapshot-local/</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <developers>
         <developer>
@@ -430,6 +443,17 @@
             <organization>Freestone Infotech</organization>
         </developer>
         <developer>
+            <id>rmani</id>
+            <name>Ramesh Mani</name>
+            <email>rmani@apache.org</email>
+            <timezone>America/Los_Angeles</timezone>
+            <roles>
+                <role>committer</role>
+            </roles>
+            <organization>Hortonworks Inc.</organization>
+            <!--<organizationUrl>http://www.hortonworks.com</organizationUrl>-->
+        </developer>
+        <developer>
             <id>sarath</id>
             <name>Sarath Subramanian</name>
             <email>sarath@apache.org</email>
@@ -645,6 +669,7 @@
         <kafka.scala.binary.version>2.11</kafka.scala.binary.version>
         <curator.version>2.11.0</curator.version>
         <zookeeper.version>3.4.6</zookeeper.version>
+        <janus.version>0.3.1</janus.version>
 
         <json.version>3.2.11</json.version>
         <log4j.version>1.2.17</log4j.version>
@@ -726,6 +751,11 @@
         <testng.version>6.9.4</testng.version>
         <joda-time.version>2.10</joda-time.version>
         <jersey-spring.version>1.19.4</jersey-spring.version>
+
+        <!--arifactory username and password for maven publishing purposes-->
+        <artifactory-username>set-in-jenkins-settings-xml</artifactory-username>
+        <artifactory-password>set-in-jenkins-settings-xml</artifactory-password>
+        
     </properties>
 
     <modules>
@@ -787,28 +817,97 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
+
+        <repository>
+            <id>spring-repo</id>
+            <url>https://repo.spring.io/release</url>
+        </repository>
+
+        <repository>
+            <id>jcenter</id>
+            <url>https://jcenter.bintray.com/</url>
+        </repository>
+
+        <repository>
+            <id>apache.snapshots</id>
+            <name>Apache snapshots</name>
+            <url>http://repository.apache.org/snapshots</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
+        <repository>
+            <id>maven.local</id>
+            <name>maven local snapshots</name>
+            <url>file://var/lib/jenkins/.m2/repository</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
         <repository>
             <id>apache-staging</id>
             <url>https://repository.apache.org/content/groups/staging/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
         <repository>
             <id>default</id>
             <url>https://repository.apache.org/content/groups/public/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
         <repository>
             <id>java.net-Public</id>
             <name>Maven Java Net Snapshots and Releases</name>
             <url>https://maven.java.net/content/groups/public/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
         <repository>
             <id>repository.jboss.org-public</id>
             <name>JBoss repository</name>
             <url>https://repository.jboss.org/nexus/content/groups/public</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
         <repository>
             <id>typesafe</id>
             <name>Typesafe Repository</name>
             <url>http://repo.typesafe.com/typesafe/releases/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>zenAptix-release-local</id>
+            <name>zenAptix Release Repository</name>
+            <url>https://artifactory-m-jenkins-port.apps.zenaptix.net/artifactory/libs-release-local/</url>
+            <layout>default</layout>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>zenAptix-snapshot-local</id>
+            <name>zenAptix Snapshot Repository</name>
+            <url>https://artifactory-m-jenkins-port.apps.zenaptix.net/artifactory/libs-snapshot-local/</url>
+            <layout>default</layout>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
         </repository>
     </repositories>
 
@@ -1668,6 +1767,41 @@
             <plugins>
                 <!-- support for enforcement of maven & Java versions -->
                 <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <version>3.0</version>
+                    <executions>
+                        <execution>
+                            <id>attach-artifacts</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>attach-artifact</goal>
+                            </goals>
+                            <configuration>
+                                <artifacts>
+                                    <artifact>
+                                        <file>${project.basedir}/target/*.tar.gz</file>
+                                        <type>tar.gz</type>
+                                        <classifier>optional</classifier>
+                                    </artifact>
+                                </artifacts>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <id>default-testCompile</id>
+                            <phase>compile</phase>
+                            <goals>
+                                <goal>testCompile</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
                     <inherited>true</inherited>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-enforcer-plugin</artifactId>
@@ -1823,6 +1957,13 @@
                         </execution>
                     </executions>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <configuration>
+                        <skip>true</skip>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
 
@@ -1868,6 +2009,7 @@
                         <goals>
                             <goal>jar-no-fork</goal>
                             <goal>test-jar-no-fork</goal>
+                            <goal>generated-test-jar</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -2117,15 +2259,18 @@
             <plugin>
                 <artifactId>maven-clean-plugin</artifactId>
                 <configuration>
-                    <filesets>
-                        <fileset>
-                            <directory>${basedir}</directory>
-                            <includes>
-                                <include>**/*.pyc</include>
-                            </includes>
-                            <followSymlinks>false</followSymlinks>
-                        </fileset>
-                    </filesets>
+                    <excludeDefaultDirectories>true</excludeDefaultDirectories>
+                        <filesets>
+                            <fileset>
+                                <directory>target</directory>
+                                <includes>
+                                    <include>**</include>
+                                </includes>
+                                <excludes>
+                                    <exclude>${project.basedir}/target/*.tar.gz</exclude>
+                                </excludes>
+                            </fileset>
+                        </filesets>
                 </configuration>
             </plugin>
 
@@ -2185,10 +2330,62 @@
             </plugin>
 
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>wagon-maven-plugin</artifactId>
+                <version>1.0</version>
+                <executions>
+                    <execution>
+                        <id>deploy-release</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>upload</goal>
+                        </goals>
+                        <configuration>
+                            <serverId>artifactory-m</serverId>
+                            <url>http://artifactory-m-jenkins-port.apps.zenaptix.net/artifactory/simple/libs-snapshot-local</url>
+                            <fromDir>distro/target/</fromDir>
+                            <toDir>org/apache/atlas/atlas-distro/${project.version}</toDir>
+                            <includes>*.tar.gz</includes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
                     <skipAssembly>true</skipAssembly>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jfrog.buildinfo</groupId>
+                <artifactId>artifactory-maven-plugin</artifactId>
+                <version>2.6.1</version>
+                <inherited>false</inherited>
+                <executions>
+                    <execution>
+                        <id>build-info</id>
+                        <goals>
+                            <goal>publish</goal>
+                        </goals>
+                        <configuration>
+                            <publisher>
+                                <contextUrl>https://artifactory-m-jenkins-port.apps.zenaptix.net/artifactory</contextUrl>
+                                <username>${artifactory-username}</username>
+                                <password>${artifactory-password}</password>
+                                <snapshotRepoKey>libs-snapshot-local</snapshotRepoKey>
+                                <repoKey>libs-release-local</repoKey>
+                            </publisher>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
                 </configuration>
             </plugin>
         </plugins>
