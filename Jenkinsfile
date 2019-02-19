@@ -219,13 +219,24 @@ def isPRBranch(branchName){
     return isValid
 }
 
+// Check if provided branch is a release branch
+def isRBranch(branchName){
+    isValid = false
+
+    if(branchName.matches(branchName.matches('(release)\\/([0-9].[0-9].[0-9]-[a-z][0-9]+)'))){
+        isValid = true
+    }
+    return isValid
+}
+
 // Check if provided branch is valid
 def isValidBranch(branchName){
     return isBugBranch(branchName) ||
             isPRBranch(branchName) ||
             isMasterBranch(branchName) ||
             isFeatureBranch(branchName) ||
-            isHotfixBranch(branchName)
+            isHotfixBranch(branchName) ||
+            isRBranch(branchName)
 }
 
 // Find version that will be published
@@ -252,6 +263,9 @@ def isValidVersion(srcVersion,branchName){
         isValid = true
     }
     else if(env.SRC_VERSION.matches('([0-9]+.[0-9]+.[0-9])') && (isFeatureBranch(branchName)|| isBugBranch(branchName) || isMasterBranch(branchName) || isPRBranch(branchName))){
+        isValid = true
+    }
+    else if(env.SRC_VERSION.matches('([0-9]+.[0-9]+.[0-9])') && isRBranch(branchName)){
         isValid = true
     }
 
