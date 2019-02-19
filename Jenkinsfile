@@ -17,7 +17,7 @@ pipeline {
                 script {
                     // Fail fast if incorrect branch
                     if(!isValidBranch(env.BRANCH_NAME)){
-                        error("Invalid branch. Only feature/master/PR/bug/hotfix branches are allowed.")
+                        error("Invalid branch. Only feature/master/PR/bug/hotfix/release branches are allowed.")
                     }
                 }
             }
@@ -223,7 +223,7 @@ def isPRBranch(branchName){
 def isRBranch(branchName){
     isValid = false
 
-    if(branchName.matches(branchName.matches('(release)\\/([0-9].[0-9].[0-9]-[a-z][0-9]+)'))){
+    if(branchName.matches('(release)\\/([0-9]\\.[0-9]\\.[0-9]-[a-z]+[0-9]+)')){
         isValid = true
     }
     return isValid
