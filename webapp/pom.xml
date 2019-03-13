@@ -424,6 +424,12 @@
             <artifactId>jna</artifactId>
             <version>4.1.0</version>
         </dependency>
+        <!--KEYCLOAK-->
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-spring-security-adapter</artifactId>
+            <version>5.0.0</version>
+        </dependency>
     </dependencies>
 
     <build>
