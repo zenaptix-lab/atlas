@@ -25,8 +25,10 @@ import org.apache.atlas.web.filters.AtlasKnoxSSOAuthenticationFilter;
 import org.apache.atlas.web.filters.StaleTransactionCleanupFilter;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.lang.StringUtils;
+import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -34,8 +36,11 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.DelegatingAuthenticationEntryPoint;
+import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
+import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter;
@@ -49,7 +54,7 @@ import static org.apache.atlas.AtlasConstants.ATLAS_MIGRATION_MODE_FILENAME;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class AtlasSecurityConfig extends WebSecurityConfigurerAdapter {
+public class AtlasSecurityConfig extends WebSecurityConfigurerAdapter, KeycloakWebSecurityConfigurerAdapter {
     private static final Logger LOG = LoggerFactory.getLogger(AtlasSecurityConfig.class);
 
     private final AtlasAuthenticationProvider authenticationProvider;
@@ -101,6 +106,16 @@ public class AtlasSecurityConfig extends WebSecurityConfigurerAdapter {
         entryPoint.setDefaultEntryPoint(getAuthenticationEntryPoint());
         return entryPoint;
     }
+
+    /**
+     * Defines the session authentication strategy.
+     */
+    @Bean
+    @Override
+    protected SessionAuthenticationStrategy sessionAuthenticationStrategy() {
+        return new RegisterSessionAuthenticationStrategy(new SessionRegistryImpl());
+    }
+
 
     @Inject
     protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) {
