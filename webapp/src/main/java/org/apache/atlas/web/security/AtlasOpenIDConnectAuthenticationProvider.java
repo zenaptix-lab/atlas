@@ -36,6 +36,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.stereotype.Component;
+import org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticationProvider.*;
 
 import javax.inject.Inject;
 import java.util.Collection;
@@ -53,34 +54,34 @@ public class AtlasOpenIDConnectAuthenticationProvider extends AtlasAbstractAuthe
         this.userDetailsService = userDetailsService;
     }
 
-    @Override
-    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        String username = authentication.getName();
-        String password = (String) authentication.getCredentials();
-        if (username == null || username.isEmpty()) {
-            logger.error("Username can't be null or empty.");
-            throw new BadCredentialsException(
-                    "Username can't be null or empty.");
-        }
-
-        if (password == null || password.isEmpty()) {
-            logger.error("Password can't be null or empty.");
-            throw new BadCredentialsException(
-                    "Password can't be null or empty.");
-        }
-
-        UserDetails user = userDetailsService.loadUserByUsername(username);
-
-        String encodedPassword = UserDao.getSha256Hash(password);
-
-        if (!encodedPassword.equals(user.getPassword())) {
-            logger.error("Wrong password " + username);
-            throw new BadCredentialsException("Wrong password");
-        }
-        Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
-        authentication = new UsernamePasswordAuthenticationToken(username, password, authorities);
-
-        return authentication;
-    }
+//    @Override
+//    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+//        String username = authentication.getName();
+//        String password = (String) authentication.getCredentials();
+//        if (username == null || username.isEmpty()) {
+//            logger.error("Username can't be null or empty.");
+//            throw new BadCredentialsException(
+//                    "Username can't be null or empty.");
+//        }
+//
+//        if (password == null || password.isEmpty()) {
+//            logger.error("Password can't be null or empty.");
+//            throw new BadCredentialsException(
+//                    "Password can't be null or empty.");
+//        }
+//
+//        UserDetails user = userDetailsService.loadUserByUsername(username);
+//
+//        String encodedPassword = UserDao.getSha256Hash(password);
+//
+//        if (!encodedPassword.equals(user.getPassword())) {
+//            logger.error("Wrong password " + username);
+//            throw new BadCredentialsException("Wrong password");
+//        }
+//        Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
+//        authentication = new UsernamePasswordAuthenticationToken(username, password, authorities);
+//
+//        return authentication;
+//    }
 
 }

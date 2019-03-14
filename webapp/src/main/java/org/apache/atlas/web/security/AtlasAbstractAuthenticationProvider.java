@@ -23,6 +23,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.security.Groups;
 import org.apache.hadoop.security.UserGroupInformation;
+import org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticationProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -40,7 +41,7 @@ import java.util.Set;
 
 import org.apache.atlas.utils.AuthenticationUtil;
 
-public abstract class AtlasAbstractAuthenticationProvider implements AuthenticationProvider {
+public abstract class AtlasAbstractAuthenticationProvider extends KeycloakAuthenticationProvider {
     private static final Logger LOG = LoggerFactory.getLogger(AtlasAbstractAuthenticationProvider.class);
 
     @Override
