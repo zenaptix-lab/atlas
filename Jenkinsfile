@@ -8,6 +8,7 @@ pipeline {
     environment {
         GIT_EMAIL = 'toolusr@zenaptix.com'
         GIT_USER = 'Tool User'
+        MAVEN_OPTS= "-Xms$MEM_LIMIT -Xmx$MEM_LIMIT"
     }
 
     stages {
@@ -108,8 +109,8 @@ pipeline {
         stage('Build Artifacts') {
             steps {
                 script{
-                    sh """mvn -T 9 clean -DskipTests -Drat.skip=true -X install"""
-                    sh """mvn -T 9 clean -DskipTests -Drat.skip=true package -Pdist"""
+                    sh """mvn clean -DskipTests -Drat.skip=true -X install"""
+                    sh """mvn clean -DskipTests -Drat.skip=true package -Pdist"""
                 }
             }
         }
@@ -122,7 +123,7 @@ pipeline {
             steps {
                 print "Publishing Artifacts"
                 script{
-                    sh 'mvn -T 9 clean deploy -DskipTests -Drat.skip=true -e'
+                    sh """mvn clean deploy -DskipTests -Drat.skip=true -e"""
                 }
             }
         }
