@@ -123,7 +123,7 @@ pipeline {
             steps {
                 print "Publishing Artifacts"
                 script{
-                    sh """mvn clean deploy -DskipTests -Drat.skip=true -e"""
+                    sh 'mvn clean deploy -DskipTests -Drat.skip=true -e'
                 }
             }
         }
