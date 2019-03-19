@@ -146,6 +146,7 @@ public class AtlasRepositoryConfiguration {
             return ApplicationProperties.getClass(config,
                     GRAPH_DATABASE_IMPLEMENTATION_PROPERTY, DEFAULT_GRAPH_DATABASE_IMPLEMENTATION_CLASS, GraphDatabase.class);
         } catch (AtlasException e) {
+            LOG.error("###############################################COULD NOT GET GRAPH DATABASE###############################################");
             throw new RuntimeException(e);
         }
     }
