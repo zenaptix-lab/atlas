@@ -25,8 +25,11 @@ import org.apache.atlas.web.filters.AtlasKnoxSSOAuthenticationFilter;
 import org.apache.atlas.web.filters.StaleTransactionCleanupFilter;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.lang.StringUtils;
+import org.keycloak.adapters.springsecurity.AdapterDeploymentContextFactoryBean;
 import org.keycloak.adapters.springsecurity.KeycloakConfiguration;
 import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
+import org.keycloak.adapters.springsecurity.authentication.*;
+import org.keycloak.adapters.springsecurity.filter.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,11 +44,13 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.DelegatingAuthenticationEntryPoint;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestHeaderRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
@@ -68,6 +73,16 @@ public class AtlasSecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     private final AtlasCSRFPreventionFilter csrfPreventionFilter;
     private final AtlasAuthenticationEntryPoint atlasAuthenticationEntryPoint;
 
+    //keycloak config
+    private final AdapterDeploymentContextFactoryBean adapterDeploymentContext; //  (keycloak.json)
+    private final KeycloakAuthenticationEntryPoint keycloakAuthenticationEntryPoint;
+    private final KeycloakAuthenticationProvider keycloakAuthenticationProvider;
+    private final KeycloakPreAuthActionsFilter keycloakPreAuthActionsFilter;
+    private final KeycloakAuthenticationProcessingFilter keycloakAuthenticationProcessingFilter; // (authenticationManager)
+    private final KeycloakLogoutHandler keycloakLogoutHandler;  // (adapterDeploymentContext)
+    private final AntPathRequestMatcher logoutRequestMatcher;
+    private final LogoutFilter logoutFilter; //(logoutSuccessUrl,handlers[KeycloakLogoutHandler],logoutRequestMatcher("/sso/logout**","GET"))
+
     // Our own Atlas filters need to be registered as well
     private final Configuration configuration;
     private final StaleTransactionCleanupFilter staleTransactionCleanupFilter;
@@ -81,6 +96,15 @@ public class AtlasSecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
                                AtlasAuthenticationSuccessHandler successHandler,
                                AtlasAuthenticationFailureHandler failureHandler,
                                AtlasAuthenticationEntryPoint atlasAuthenticationEntryPoint,
+                               AdapterDeploymentContextFactoryBean adapterDeploymentContext,
+                               KeycloakAuthenticationEntryPoint keycloakAuthenticationEntryPoint,
+                               KeycloakAuthenticationProvider keycloakAuthenticationProvider,
+                               KeycloakPreAuthActionsFilter keycloakPreAuthActionsFilter,
+                               KeycloakAuthenticationProcessingFilter keycloakAuthenticationProcessingFilter,
+                               KeycloakLogoutHandler keycloakLogoutHandler,
+                               AntPathRequestMatcher logoutRequestMatcher,
+                               LogoutFilter logoutFilter,
+
                                Configuration configuration,
                                StaleTransactionCleanupFilter staleTransactionCleanupFilter,
                                ActiveServerFilter activeServerFilter) {
@@ -91,6 +115,15 @@ public class AtlasSecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
         this.successHandler = successHandler;
         this.failureHandler = failureHandler;
         this.atlasAuthenticationEntryPoint = atlasAuthenticationEntryPoint;
+        this.adapterDeploymentContext = adapterDeploymentContext;
+        this.keycloakAuthenticationEntryPoint = keycloakAuthenticationEntryPoint;
+        this.keycloakAuthenticationProvider = keycloakAuthenticationProvider;
+        this.keycloakPreAuthActionsFilter = keycloakPreAuthActionsFilter;
+        this.keycloakAuthenticationProcessingFilter = keycloakAuthenticationProcessingFilter;
+        this.keycloakLogoutHandler = keycloakLogoutHandler;
+        this.logoutRequestMatcher = logoutRequestMatcher;
+        this.logoutFilter = logoutFilter;
+
         this.configuration = configuration;
         this.staleTransactionCleanupFilter = staleTransactionCleanupFilter;
         this.activeServerFilter = activeServerFilter;

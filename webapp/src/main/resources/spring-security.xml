@@ -91,34 +91,34 @@
     </beans:bean>
 
     <beans:bean id="adapterDeploymentContext" class="org.keycloak.adapters.springsecurity.AdapterDeploymentContextFactoryBean">
-        <constructor-arg value="keycloak.json" />
+        <beans:constructor-arg value="keycloak.json" />
     </beans:bean>
 
     <beans:bean id="keycloakAuthenticationEntryPoint" class="org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticationEntryPoint" />
     <beans:bean id="keycloakAuthenticationProvider" class="org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticationProvider" />
     <beans:bean id="keycloakPreAuthActionsFilter" class="org.keycloak.adapters.springsecurity.filter.KeycloakPreAuthActionsFilter" />
     <beans:bean id="keycloakAuthenticationProcessingFilter" class="org.keycloak.adapters.springsecurity.filter.KeycloakAuthenticationProcessingFilter">
-        <constructor-arg name="authenticationManager" ref="authenticationManager" />
+        <beans:constructor-arg name="authenticationManager" ref="authenticationManager" />
     </beans:bean>
 
     <beans:bean id="keycloakLogoutHandler" class="org.keycloak.adapters.springsecurity.authentication.KeycloakLogoutHandler">
-        <constructor-arg ref="adapterDeploymentContext" />
+        <beans:constructor-arg ref="adapterDeploymentContext" />
     </beans:bean>
 
     <beans:bean id="logoutFilter" class="org.springframework.security.web.authentication.logout.LogoutFilter">
-        <constructor-arg name="logoutSuccessUrl" value="/" />
-        <constructor-arg name="handlers">
-            <list>
-                <ref bean="keycloakLogoutHandler" />
-                <bean class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler" />
-            </list>
-        </constructor-arg>
-        <property name="logoutRequestMatcher">
-            <bean class="org.springframework.security.web.util.matcher.AntPathRequestMatcher">
-                <constructor-arg name="pattern" value="/sso/logout**" />
-                <constructor-arg name="httpMethod" value="GET" />
-            </bean>
-        </property>
+        <beans:constructor-arg name="logoutSuccessUrl" value="/" />
+        <beans:constructor-arg name="handlers">
+            <beans:list>
+                <beans:ref bean="keycloakLogoutHandler" />
+                <beans:bean class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler" />
+            </beans:list>
+        </beans:constructor-arg>
+        <beans:property name="logoutRequestMatcher">
+            <beans:bean class="org.springframework.security.web.util.matcher.AntPathRequestMatcher">
+                <beans:constructor-arg name="pattern" value="/sso/logout**" />
+                <beans:constructor-arg name="httpMethod" value="GET" />
+            </beans:bean>
+        </beans:property>
     </beans:bean>
 
 
