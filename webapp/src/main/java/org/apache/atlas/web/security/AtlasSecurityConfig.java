@@ -27,6 +27,7 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.lang.StringUtils;
 import org.keycloak.adapters.springsecurity.AdapterDeploymentContextFactoryBean;
 import org.keycloak.adapters.springsecurity.KeycloakConfiguration;
+import org.keycloak.adapters.springsecurity.config.KeycloakSpringConfigResolverWrapper;
 import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
 import org.keycloak.adapters.springsecurity.authentication.*;
 import org.keycloak.adapters.springsecurity.filter.*;
@@ -34,6 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.io.Resource;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -54,7 +56,13 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestHeaderRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
+
 import javax.inject.Inject;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URL;
 import java.util.LinkedHashMap;
 
 import static org.apache.atlas.AtlasConstants.ATLAS_MIGRATION_MODE_FILENAME;
@@ -82,6 +90,8 @@ public class AtlasSecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     private final KeycloakLogoutHandler keycloakLogoutHandler;  // (adapterDeploymentContext)
     private final AntPathRequestMatcher logoutRequestMatcher;
     private final LogoutFilter logoutFilter; //(logoutSuccessUrl,handlers[KeycloakLogoutHandler],logoutRequestMatcher("/sso/logout**","GET"))
+    private Resource keycloakConfigFileResource;
+
 
     // Our own Atlas filters need to be registered as well
     private final Configuration configuration;
@@ -104,6 +114,7 @@ public class AtlasSecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
                                KeycloakLogoutHandler keycloakLogoutHandler,
                                AntPathRequestMatcher logoutRequestMatcher,
                                LogoutFilter logoutFilter,
+                               Resource keycloakConfigFileResource,
 
                                Configuration configuration,
                                StaleTransactionCleanupFilter staleTransactionCleanupFilter,
@@ -123,24 +134,32 @@ public class AtlasSecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
         this.keycloakLogoutHandler = keycloakLogoutHandler;
         this.logoutRequestMatcher = logoutRequestMatcher;
         this.logoutFilter = logoutFilter;
+        this.keycloakConfigFileResource = keycloakConfigFileResource;
 
         this.configuration = configuration;
         this.staleTransactionCleanupFilter = staleTransactionCleanupFilter;
         this.activeServerFilter = activeServerFilter;
     }
 
-    public BasicAuthenticationEntryPoint getAuthenticationEntryPoint() {
-        BasicAuthenticationEntryPoint basicAuthenticationEntryPoint = new BasicAuthenticationEntryPoint();
-        basicAuthenticationEntryPoint.setRealmName("atlas.com");
-        return basicAuthenticationEntryPoint;
+    public KeycloakAuthenticationEntryPoint getAuthenticationEntryPoint() throws Exception {
+        try {
+            KeycloakAuthenticationEntryPoint basicAuthenticationEntryPoint = new KeycloakAuthenticationEntryPoint(adapterDeploymentContext());
+            basicAuthenticationEntryPoint.setRealm("atlas.com");
+            return basicAuthenticationEntryPoint;
+        }
+        catch (Exception e) {
+            throw new Exception(e);
+        }
     }
 
-    public DelegatingAuthenticationEntryPoint getDelegatingAuthenticationEntryPoint() {
+    public DelegatingAuthenticationEntryPoint getDelegatingAuthenticationEntryPoint() throws Exception {
         LinkedHashMap<RequestMatcher, AuthenticationEntryPoint> entryPointMap = new LinkedHashMap<>();
         entryPointMap.put(new RequestHeaderRequestMatcher("User-Agent", "Mozilla"), atlasAuthenticationEntryPoint);
         DelegatingAuthenticationEntryPoint entryPoint = new DelegatingAuthenticationEntryPoint(entryPointMap);
         entryPoint.setDefaultEntryPoint(getAuthenticationEntryPoint());
         return entryPoint;
+
+        //todo:  replace existing altas security config with keycloak version that can be found in abstract class
     }
 
     /**
@@ -160,6 +179,9 @@ public class AtlasSecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
         return new RegisterSessionAuthenticationStrategy(new SessionRegistryImpl());
     }
 
+    public KeycloakSecurityContextRequestFilter keycloakSecurityContextRequestFilter(){
+        return new KeycloakSecurityContextRequestFilter();
+    }
 
     @Inject
     protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) {
@@ -192,9 +214,18 @@ public class AtlasSecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
                     .headers().disable()
                     .servletApi()
                 .and()
-                    .csrf().disable()
+                    //.csrf().disable()
+                    .csrf()
+                    .requireCsrfProtectionMatcher(keycloakCsrfRequestMatcher())
+                    .and()
                     .sessionManagement()
-                    .enableSessionUrlRewriting(false)
+                    .sessionAuthenticationStrategy(sessionAuthenticationStrategy())
+                    .and()
+                    .addFilterBefore(keycloakPreAuthActionsFilter(), LogoutFilter.class).addFilterBefore(keycloakAuthenticationProcessingFilter(), BasicAuthenticationFilter.class)
+                    .addFilterAfter(keycloakSecurityContextRequestFilter(), SecurityContextHolderAwareRequestFilter.class).addFilterAfter(keycloakAuthenticatedActionsRequestFilter(), KeycloakSecurityContextRequestFilter.class)
+//                    .exceptionHandling()
+                //.enableSessionUrlRewriting(false)
+                .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
                     .sessionFixation()
                     .newSession()
