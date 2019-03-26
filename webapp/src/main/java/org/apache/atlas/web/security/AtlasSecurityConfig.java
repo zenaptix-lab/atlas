@@ -25,9 +25,9 @@ import org.apache.atlas.web.filters.AtlasKnoxSSOAuthenticationFilter;
 import org.apache.atlas.web.filters.StaleTransactionCleanupFilter;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.lang.StringUtils;
+import org.keycloak.adapters.AdapterDeploymentContext;
 import org.keycloak.adapters.springsecurity.AdapterDeploymentContextFactoryBean;
 import org.keycloak.adapters.springsecurity.KeycloakConfiguration;
-import org.keycloak.adapters.springsecurity.config.KeycloakSpringConfigResolverWrapper;
 import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
 import org.keycloak.adapters.springsecurity.authentication.*;
 import org.keycloak.adapters.springsecurity.filter.*;
@@ -143,7 +143,7 @@ public class AtlasSecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
 
     public KeycloakAuthenticationEntryPoint getAuthenticationEntryPoint() throws Exception {
         try {
-            KeycloakAuthenticationEntryPoint basicAuthenticationEntryPoint = new KeycloakAuthenticationEntryPoint(adapterDeploymentContext());
+            KeycloakAuthenticationEntryPoint basicAuthenticationEntryPoint = new KeycloakAuthenticationEntryPoint(adapterDeploymentContext.getObject());
             basicAuthenticationEntryPoint.setRealm("atlas.com");
             return basicAuthenticationEntryPoint;
         }
@@ -154,7 +154,7 @@ public class AtlasSecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
 
     public DelegatingAuthenticationEntryPoint getDelegatingAuthenticationEntryPoint() throws Exception {
         LinkedHashMap<RequestMatcher, AuthenticationEntryPoint> entryPointMap = new LinkedHashMap<>();
-        entryPointMap.put(new RequestHeaderRequestMatcher("User-Agent", "Mozilla"), atlasAuthenticationEntryPoint);
+        entryPointMap.put(new RequestHeaderRequestMatcher("User-Agent", "Mozilla"), keycloakAuthenticationEntryPoint);
         DelegatingAuthenticationEntryPoint entryPoint = new DelegatingAuthenticationEntryPoint(entryPointMap);
         entryPoint.setDefaultEntryPoint(getAuthenticationEntryPoint());
         return entryPoint;
@@ -167,7 +167,7 @@ public class AtlasSecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
      */
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(keycloakAuthenticationProvider());
+        auth.authenticationProvider(keycloakAuthenticationProvider);
     }
 
     /**
@@ -185,7 +185,7 @@ public class AtlasSecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
 
     @Inject
     protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) {
-        authenticationManagerBuilder.authenticationProvider(authenticationProvider);
+        authenticationManagerBuilder.authenticationProvider(keycloakAuthenticationProvider);
     }
 
     @Override
@@ -204,12 +204,11 @@ public class AtlasSecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity) throws Exception {
 
         //@formatter:off
-        super.configure(httpSecurity);
         httpSecurity
                 .authorizeRequests().anyRequest().authenticated()
-                .antMatchers("/customers*").hasRole("USER")
-                .antMatchers("/admin*").hasRole("ADMIN")
-                .anyRequest().permitAll()
+//                .antMatchers("/customers*").hasRole("USER")
+//                .antMatchers("/admin*").hasRole("ADMIN")
+//                .anyRequest().permitAll()
                 .and()
                     .headers().disable()
                     .servletApi()
@@ -217,18 +216,19 @@ public class AtlasSecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
                     //.csrf().disable()
                     .csrf()
                     .requireCsrfProtectionMatcher(keycloakCsrfRequestMatcher())
-                    .and()
+                .and()
                     .sessionManagement()
+                    .enableSessionUrlRewriting(false)
                     .sessionAuthenticationStrategy(sessionAuthenticationStrategy())
-                    .and()
-                    .addFilterBefore(keycloakPreAuthActionsFilter(), LogoutFilter.class).addFilterBefore(keycloakAuthenticationProcessingFilter(), BasicAuthenticationFilter.class)
-                    .addFilterAfter(keycloakSecurityContextRequestFilter(), SecurityContextHolderAwareRequestFilter.class).addFilterAfter(keycloakAuthenticatedActionsRequestFilter(), KeycloakSecurityContextRequestFilter.class)
-//                    .exceptionHandling()
-                //.enableSessionUrlRewriting(false)
-                .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
                     .sessionFixation()
                     .newSession()
+                .and()
+                    .addFilterBefore(keycloakPreAuthActionsFilter, LogoutFilter.class)
+                    .addFilterBefore(keycloakAuthenticationProcessingFilter, BasicAuthenticationFilter.class)
+                    .addFilterAfter(keycloakSecurityContextRequestFilter(), SecurityContextHolderAwareRequestFilter.class)
+                    .addFilterAfter(keycloakAuthenticatedActionsRequestFilter(), KeycloakSecurityContextRequestFilter.class)
+                    .exceptionHandling()
                 .and()
                 .httpBasic()
                 .authenticationEntryPoint(getDelegatingAuthenticationEntryPoint())
@@ -242,9 +242,11 @@ public class AtlasSecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
                         .passwordParameter("j_password")
                 .and()
                     .logout()
-                        .logoutSuccessUrl("/login.jsp")
+                        .addLogoutHandler(keycloakLogoutHandler)
                         .deleteCookies("ATLASSESSIONID")
-                        .logoutUrl("/logout.html");
+                        .logoutUrl("/logout.html")
+                        .permitAll()
+                        .logoutSuccessUrl("/login.jsp");
 
         //@formatter:on
 
