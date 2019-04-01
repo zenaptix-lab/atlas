@@ -1,0 +1,34 @@
+{
+  "realm" : "demo",
+  "resource" : "customer-portal",
+  "realm-public-key" : "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApYI1wwI0xe+0yu87I27fmxPVEh5K8bOYi0+FJFSFTA2JnDSlqGper3VAuesotzvQ8W5baWshf0QFQ6q5yu0oopJASzXkaYQhqT6BN6b0QfpTm+zHDs2Zx+Qu86PrKit9j3bdU2VivkJ23tn8XK7ucFFo+27Qc266YDTv1/FhhNjsfA+7fFsSCCN1sKHty9oldZOkPUlC28QNlc3wBCaGDbWKYd7Abx4PkCPSuyah1xzhySiiKhgvngOKSmFH//jUMxVFTpvm7rgWgRqUbkEUEoT6ShQLugiqIV61xICjd98mvjC2DSO/rjccRO18xqLA4nbk+LH+aG0S9Eb7+35uwQIDAQAB",
+  "auth-server-url" : "https://secure-keycloak-atlas.apps.zenaptix.net/auth",
+  "ssl-required" : "external",
+  "use-resource-role-mappings" : false,
+  "enable-cors" : true,
+  "cors-max-age" : 1000,
+  "cors-allowed-methods" : "POST, PUT, DELETE, GET",
+  "cors-exposed-headers" : "WWW-Authenticate, My-custom-exposed-Header",
+  "bearer-only" : false,
+  "enable-basic-auth" : false,
+  "expose-token" : true,
+  "verify-token-audience" : true,
+  "credentials" : {
+    "secret" : "234234-234234-234234"
+  },
+
+  "connection-pool-size" : 20,
+  "disable-trust-manager": false,
+  "allow-any-hostname" : false,
+  "truststore" : "/home/rikus/Documents/ZenAptix/keystore/keycloak.pfx",
+  "truststore-password" : "atlasadm1n",
+  "client-keystore" : "/home/rikus/Documents/ZenAptix/keystore/keycloak.jks",
+  "client-keystore-password" : "atlasadm1n",
+  "client-key-password" : "atlasadm1n",
+  "token-minimum-time-to-live" : 10,
+  "min-time-between-jwks-requests" : 10,
+  "public-key-cache-ttl": 86400,
+  "redirect-rewrite-rules" : {
+    "^/wsmaster/api/(.*)$" : "/api/$1"
+  }
+}
