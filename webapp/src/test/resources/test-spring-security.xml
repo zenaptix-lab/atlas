@@ -14,7 +14,7 @@
     <context:component-scan base-package="org.keycloak.adapters.springsecurity" />
 
     <security:authentication-manager alias="authenticationManager">
-        <security:authentication-provider ref="keycloakAuthenticationProvider" />
+        <security:authentication-provider ref="KeycloakUserDetailsAuthenticationProvider" />
     </security:authentication-manager>
 
     <bean id="adapterDeploymentContext" class="org.keycloak.adapters.springsecurity.AdapterDeploymentContextFactoryBean">
@@ -24,7 +24,11 @@
     <bean id="keycloakAuthenticationEntryPoint" class="org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticationEntryPoint">
         <constructor-arg ref="adapterDeploymentContext" />
     </bean>
-    <bean id="keycloakAuthenticationProvider" class="org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticationProvider" />
+
+    <bean id="KeycloakUserDetailsAuthenticationProvider" class="org.apache.atlas.web.security.KeycloakUserDetailsAuthenticationProvider">
+        <property name="userDetailsService" value="org.apache.atlas.web.security."/>
+    </bean>
+
     <bean id="keycloakPreAuthActionsFilter" class="org.keycloak.adapters.springsecurity.filter.KeycloakPreAuthActionsFilter" />
     <bean id="keycloakAuthenticationProcessingFilter" class="org.keycloak.adapters.springsecurity.filter.KeycloakAuthenticationProcessingFilter">
         <constructor-arg name="authenticationManager" ref="authenticationManager" />
