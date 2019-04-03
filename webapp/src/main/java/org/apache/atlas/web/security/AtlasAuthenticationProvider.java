@@ -41,7 +41,7 @@ public class AtlasAuthenticationProvider extends AtlasAbstractAuthenticationProv
     public static final String LDAP_AUTH_METHOD = "atlas.authentication.method.ldap";
     public static final String LDAP_TYPE = "atlas.authentication.method.ldap.type";
     public static final String PAM_AUTH_METHOD = "atlas.authentication.method.pam";
-    public static final String OPENIDCONNNECT_AUTH_METHOD = "atlas.authentication.method.openidconnect";
+//    public static final String OPENIDCONNNECT_AUTH_METHOD = "atlas.authentication.method.openidconnect";
 
 
 
@@ -55,19 +55,20 @@ public class AtlasAuthenticationProvider extends AtlasAbstractAuthenticationProv
 
     final AtlasPamAuthenticationProvider pamAuthenticationProvider;
 
-    final AtlasOpenIDConnectAuthenticationProvider openIDConnectAuthenticationProvider;
+//    final AtlasOpenIDConnectAuthenticationProvider openIDConnectAuthenticationProvider;
 
     @Inject
     public AtlasAuthenticationProvider(AtlasLdapAuthenticationProvider ldapAuthenticationProvider,
                                        AtlasFileAuthenticationProvider fileAuthenticationProvider,
                                        AtlasADAuthenticationProvider adAuthenticationProvider,
-                                       AtlasPamAuthenticationProvider pamAuthenticationProvider,
-                                       AtlasOpenIDConnectAuthenticationProvider openIDConnectAuthenticationProvider) {
+                                       AtlasPamAuthenticationProvider pamAuthenticationProvider)
+//                                       AtlasOpenIDConnectAuthenticationProvider openIDConnectAuthenticationProvider)
+                                       {
         this.ldapAuthenticationProvider = ldapAuthenticationProvider;
         this.fileAuthenticationProvider = fileAuthenticationProvider;
         this.adAuthenticationProvider = adAuthenticationProvider;
         this.pamAuthenticationProvider = pamAuthenticationProvider;
-        this.openIDConnectAuthenticationProvider = openIDConnectAuthenticationProvider;
+//        this.openIDConnectAuthenticationProvider = openIDConnectAuthenticationProvider;
     }
 
     @PostConstruct
@@ -81,7 +82,7 @@ public class AtlasAuthenticationProvider extends AtlasAbstractAuthenticationProv
 
             boolean ldapAuthenticationEnabled = configuration.getBoolean(LDAP_AUTH_METHOD, false);
 
-            this.openIDConnectAuthenticationEnabled = configuration.getBoolean(OPENIDCONNNECT_AUTH_METHOD, false);
+//            this.openIDConnectAuthenticationEnabled = configuration.getBoolean(OPENIDCONNNECT_AUTH_METHOD, false);
 
             if (ldapAuthenticationEnabled) {
                 this.ldapType = configuration.getString(LDAP_TYPE, "NONE");
@@ -124,13 +125,13 @@ public class AtlasAuthenticationProvider extends AtlasAbstractAuthenticationProv
                     LOG.error("Error while PAM authentication", ex);
                 }
             }
-            else if (openIDConnectAuthenticationEnabled) {
-                try {
-                    authentication = openIDConnectAuthenticationProvider.authenticate(authentication);
-                } catch (Exception ex) {
-                    LOG.error("Error while OpenIDConnect authentication", ex);
-                }
-            }
+//            else if (openIDConnectAuthenticationEnabled) {
+//                try {
+//                    authentication = openIDConnectAuthenticationProvider.authenticate(authentication);
+//                } catch (Exception ex) {
+//                    LOG.error("Error while OpenIDConnect authentication", ex);
+//                }
+//            }
         }
 
         if (authentication != null) {
