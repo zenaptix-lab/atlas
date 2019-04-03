@@ -69,8 +69,8 @@ public class KeycloakUserDetailsAuthenticationProviderTest {
 
         userDetailsService = new InMemoryUserDetailsManager(Collections.unmodifiableCollection(users));
 
-        provider = new KeycloakUserDetailsAuthenticationProvider();
-        provider.setUserDetailsService(userDetailsService);
+        provider = new KeycloakUserDetailsAuthenticationProvider(userDetailsService);
+//        provider.setUserDetailsService(userDetailsService);
 
         when(principal.getName()).thenReturn(KNOWN_USERNAME);
         when(account.getPrincipal()).thenReturn(principal);

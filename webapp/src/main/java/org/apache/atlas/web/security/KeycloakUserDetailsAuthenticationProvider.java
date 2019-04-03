@@ -28,6 +28,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.util.Assert;
 
+import javax.inject.Inject;
 import java.security.Principal;
 
 /**
@@ -53,6 +54,12 @@ import java.security.Principal;
 public class KeycloakUserDetailsAuthenticationProvider extends KeycloakAuthenticationProvider {
 
     private UserDetailsService userDetailsService;
+
+
+    @Inject
+    public KeycloakUserDetailsAuthenticationProvider(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -94,7 +101,6 @@ public class KeycloakUserDetailsAuthenticationProvider extends KeycloakAuthentic
         return principal.getName();
     }
 
-    @Required
     public void setUserDetailsService(UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
