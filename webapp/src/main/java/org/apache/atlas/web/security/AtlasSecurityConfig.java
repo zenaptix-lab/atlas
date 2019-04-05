@@ -25,6 +25,7 @@ import org.apache.atlas.web.filters.AtlasKnoxSSOAuthenticationFilter;
 import org.apache.atlas.web.filters.StaleTransactionCleanupFilter;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.lang.StringUtils;
+import org.keycloak.adapters.springsecurity.AdapterDeploymentContextFactoryBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -60,6 +61,8 @@ public class AtlasSecurityConfig extends WebSecurityConfigurerAdapter {
     private final AtlasCSRFPreventionFilter csrfPreventionFilter;
     private final AtlasAuthenticationEntryPoint atlasAuthenticationEntryPoint;
 
+    private final AdapterDeploymentContextFactoryBean adapterDeploymentContext;
+
     // Our own Atlas filters need to be registered as well
     private final Configuration configuration;
     private final StaleTransactionCleanupFilter staleTransactionCleanupFilter;
@@ -73,6 +76,9 @@ public class AtlasSecurityConfig extends WebSecurityConfigurerAdapter {
                                AtlasAuthenticationSuccessHandler successHandler,
                                AtlasAuthenticationFailureHandler failureHandler,
                                AtlasAuthenticationEntryPoint atlasAuthenticationEntryPoint,
+
+                               AdapterDeploymentContextFactoryBean adapterDeploymentContext,
+
                                Configuration configuration,
                                StaleTransactionCleanupFilter staleTransactionCleanupFilter,
                                ActiveServerFilter activeServerFilter) {
@@ -83,6 +89,9 @@ public class AtlasSecurityConfig extends WebSecurityConfigurerAdapter {
         this.successHandler = successHandler;
         this.failureHandler = failureHandler;
         this.atlasAuthenticationEntryPoint = atlasAuthenticationEntryPoint;
+
+        this.adapterDeploymentContext = adapterDeploymentContext;
+
         this.configuration = configuration;
         this.staleTransactionCleanupFilter = staleTransactionCleanupFilter;
         this.activeServerFilter = activeServerFilter;
