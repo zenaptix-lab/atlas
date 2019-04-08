@@ -87,6 +87,7 @@
         <beans:property name="defaultEntryPoint" ref="authenticationEntryPoint"/>
     </beans:bean>
 
+    <beans:bean id="keycloakUserDetailsAuthenticationProvider" class="org.apache.atlas.web.security.KeycloakUserDetailsAuthenticationProvider"/>
 
     <beans:bean id="atlasAuthenticationProvider"
                 class="org.apache.atlas.web.security.AtlasAuthenticationProvider">

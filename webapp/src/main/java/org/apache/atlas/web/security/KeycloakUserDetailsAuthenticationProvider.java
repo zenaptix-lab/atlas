@@ -21,14 +21,17 @@ import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.OidcKeycloakAccount;
 import org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticationProvider;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
-import org.springframework.beans.factory.annotation.Required;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import javax.inject.Inject;
+import javax.security.auth.login.AppConfigurationEntry;
 import java.security.Principal;
 
 /**
@@ -51,7 +54,10 @@ import java.security.Principal;
  * @see UserDetailsService#loadUserByUsername
  * @see KeycloakUserDetailsAuthenticationToken
  */
-public class KeycloakUserDetailsAuthenticationProvider extends KeycloakAuthenticationProvider {
+
+@Component
+public class KeycloakUserDetailsAuthenticationProvider extends AtlasAbstractAuthenticationProvider {
+    private static Logger LOG = LoggerFactory.getLogger(AtlasPamAuthenticationProvider.class);
 
     private UserDetailsService userDetailsService;
 
@@ -66,6 +72,8 @@ public class KeycloakUserDetailsAuthenticationProvider extends KeycloakAuthentic
         KeycloakAuthenticationToken token = (KeycloakAuthenticationToken) super.authenticate(authentication);
         String username;
         UserDetails userDetails;
+
+        LOG.info("============Authenticating using KeycloakUserDetailsAuth===============");
 
         if (token == null) {
             return null;
