@@ -61,7 +61,7 @@ public class AtlasSecurityConfig extends WebSecurityConfigurerAdapter {
     private final AtlasCSRFPreventionFilter csrfPreventionFilter;
     private final AtlasAuthenticationEntryPoint atlasAuthenticationEntryPoint;
 
-    private final AdapterDeploymentContextFactoryBean adapterDeploymentContext;
+//    private final AdapterDeploymentContextFactoryBean adapterDeploymentContext;
 
     // Our own Atlas filters need to be registered as well
     private final Configuration configuration;
@@ -77,7 +77,7 @@ public class AtlasSecurityConfig extends WebSecurityConfigurerAdapter {
                                AtlasAuthenticationFailureHandler failureHandler,
                                AtlasAuthenticationEntryPoint atlasAuthenticationEntryPoint,
 
-                               AdapterDeploymentContextFactoryBean adapterDeploymentContext,
+//                               AdapterDeploymentContextFactoryBean adapterDeploymentContext,
 
                                Configuration configuration,
                                StaleTransactionCleanupFilter staleTransactionCleanupFilter,
@@ -90,7 +90,7 @@ public class AtlasSecurityConfig extends WebSecurityConfigurerAdapter {
         this.failureHandler = failureHandler;
         this.atlasAuthenticationEntryPoint = atlasAuthenticationEntryPoint;
 
-        this.adapterDeploymentContext = adapterDeploymentContext;
+//        this.adapterDeploymentContext = adapterDeploymentContext;
 
         this.configuration = configuration;
         this.staleTransactionCleanupFilter = staleTransactionCleanupFilter;

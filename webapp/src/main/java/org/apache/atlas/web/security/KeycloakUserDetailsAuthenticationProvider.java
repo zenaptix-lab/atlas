@@ -41,16 +41,15 @@ import java.security.Principal;
  * The supplied {@link UserDetailsService user details service} is consulted using the Keycloak
  * access token's email as the username.
  * </p>
- *
+ * <p>
  * The original Keycloak principal is available from the {@link KeycloakAuthenticationToken}:
- *     <pre>
+ * <pre>
  *          KeycloakAuthenticationToken token = (KeycloakAuthenticationToken) SecurityContextHolder.getContext().getAuthentication());
  *          KeycloakAccount account = token.getAccount();
  *          Principal = account.getPrincipal();
  *     </pre>
  *
  * @author <a href="mailto:srossillo@smartling.com">Scott Rossillo</a>
- *
  * @see UserDetailsService#loadUserByUsername
  * @see KeycloakUserDetailsAuthenticationToken
  */
@@ -58,7 +57,7 @@ import java.security.Principal;
 @Component
 public class KeycloakUserDetailsAuthenticationProvider extends AtlasAbstractAuthenticationProvider {
     private static Logger LOG = LoggerFactory.getLogger(AtlasPamAuthenticationProvider.class);
-
+    private boolean isDebugEnabled = LOG.isDebugEnabled();
     private UserDetailsService userDetailsService;
 
 
@@ -69,20 +68,43 @@ public class KeycloakUserDetailsAuthenticationProvider extends AtlasAbstractAuth
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        KeycloakAuthenticationToken token = (KeycloakAuthenticationToken) super.authenticate(authentication);
-        String username;
-        UserDetails userDetails;
-
-        LOG.info("============Authenticating using KeycloakUserDetailsAuth===============");
-
-        if (token == null) {
-            return null;
+        Authentication auth = getKeycloakAuthentication(authentication);
+        if (auth != null && auth.isAuthenticated()) {
+            return auth;
+        } else {
+            throw new AtlasAuthenticationException("Keycloak Authentication Failed");
         }
+    }
 
-        username = this.resolveUsername(token);
-        userDetails = userDetailsService.loadUserByUsername(username);
+    private Authentication getKeycloakAuthentication(Authentication authentication) {
+        if (isDebugEnabled) {
+            LOG.debug("==> AtlasKeycloakUserDetailsAuthenticationProvider getKeycloakAuthentication");
+        }
+        try {
+            KeycloakAuthenticationToken token = (KeycloakAuthenticationToken) super.authenticate(authentication);
+            String username;
+            UserDetails userDetails;
 
-        return new KeycloakUserDetailsAuthenticationToken(userDetails, token.getAccount(), token.getAuthorities());
+            LOG.info("============Authenticating using KeycloakUserDetailsAuth===============");
+
+            if (token == null) {
+                return null;
+            }
+
+            username = this.resolveUsername(token);
+            userDetails = userDetailsService.loadUserByUsername(username);
+
+            authentication = new KeycloakUserDetailsAuthenticationToken(userDetails, token.getAccount(), token.getAuthorities());
+            return authentication;
+
+
+        } catch (Exception e) {
+            LOG.debug("Keycloak Authentication Failed", e);
+        }
+        if(isDebugEnabled) {
+            LOG.debug("<== AtlasKeycloakUserDetailsAuthenticationProvider getKeycloakAuthentication");
+        }
+        return authentication;
     }
 
     /**
@@ -93,9 +115,7 @@ public class KeycloakUserDetailsAuthenticationProvider extends AtlasAbstractAuth
      * For more fine-grained username resolution, override this method.
      *
      * @param token the {@link KeycloakAuthenticationToken} from which to extract the username
-     *
      * @return the username to use when loading a user from the this provider's {@link UserDetailsService}.
-     *
      * @see UserDetailsService#loadUserByUsername
      * @see OidcKeycloakAccount#getPrincipal
      */
