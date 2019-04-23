@@ -1,5 +1,5 @@
 {
-  "realm" : "demo",
+  "realm" : "Atlas",
   "resource" : "customer-portal",
   "realm-public-key" : "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApYI1wwI0xe+0yu87I27fmxPVEh5K8bOYi0+FJFSFTA2JnDSlqGper3VAuesotzvQ8W5baWshf0QFQ6q5yu0oopJASzXkaYQhqT6BN6b0QfpTm+zHDs2Zx+Qu86PrKit9j3bdU2VivkJ23tn8XK7ucFFo+27Qc266YDTv1/FhhNjsfA+7fFsSCCN1sKHty9oldZOkPUlC28QNlc3wBCaGDbWKYd7Abx4PkCPSuyah1xzhySiiKhgvngOKSmFH//jUMxVFTpvm7rgWgRqUbkEUEoT6ShQLugiqIV61xICjd98mvjC2DSO/rjccRO18xqLA4nbk+LH+aG0S9Eb7+35uwQIDAQAB",
   "auth-server-url" : "https://secure-keycloak-atlas.apps.zenaptix.net/auth",

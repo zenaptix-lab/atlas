@@ -16,15 +16,27 @@ package org.apache.atlas.web.security;
  * limitations under the License.
  */
 
+import org.apache.atlas.web.dao.UserDao;
 import org.apache.atlas.web.security.token.KeycloakUserDetailsAuthenticationToken;
 import org.keycloak.KeycloakPrincipal;
+import org.keycloak.KeycloakSecurityContext;
+import org.keycloak.adapters.KeycloakDeployment;
 import org.keycloak.adapters.OidcKeycloakAccount;
+import org.keycloak.adapters.RefreshableKeycloakSecurityContext;
+import org.keycloak.adapters.spi.KeycloakAccount;
+import org.keycloak.adapters.springsecurity.AdapterDeploymentContextFactoryBean;
+import org.keycloak.adapters.springsecurity.account.SimpleKeycloakAccount;
 import org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticationProvider;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
+import org.keycloak.representations.AccessToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
@@ -32,7 +44,13 @@ import org.springframework.util.Assert;
 
 import javax.inject.Inject;
 import javax.security.auth.login.AppConfigurationEntry;
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.security.Principal;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Provides a {@link KeycloakAuthenticationProvider Keycloak authentication provider} capable of
@@ -81,7 +99,23 @@ public class KeycloakUserDetailsAuthenticationProvider extends AtlasAbstractAuth
             LOG.debug("==> AtlasKeycloakUserDetailsAuthenticationProvider getKeycloakAuthentication");
         }
         try {
-            KeycloakAuthenticationToken token = (KeycloakAuthenticationToken) super.authenticate(authentication);
+            Resource inputStream = (Resource) new InputStreamResource(new FileInputStream("/home/rikus/Documents/ZenAptix/atlas/webapp/src/main/resources/keycloak.json"));
+            AdapterDeploymentContextFactoryBean context = new AdapterDeploymentContextFactoryBean(inputStream);
+            Set<String> roles = new HashSet<String>();
+            roles.add("");
+            Principal test_principal = (Principal) authentication.getPrincipal();
+            User user_principal = new User(authentication.getPrincipal().toString(),authentication.getCredentials().toString(),authentication.getAuthorities());
+            AccessToken accessToken = new AccessToken();
+            accessToken.setOtherClaims("ORG_PROPERTY_NAME", "zenAptix");
+            accessToken.setOtherClaims("PERMISSIONS_PROPERTY_NAME", "");
+
+            RefreshableKeycloakSecurityContext ksc = new RefreshableKeycloakSecurityContext(null, null, "accessTokenString", accessToken, "idTokenString", null, "refreshTokenString");
+            SimpleKeycloakAccount account = new SimpleKeycloakAccount(test_principal,roles,ksc);
+            KeycloakAuthenticationToken testToken = new KeycloakAuthenticationToken(account,true);
+
+//            KeycloakAuthenticationToken token = (KeycloakAuthenticationToken) authentication.getPrincipal();
+//            KeycloakAuthenticationToken token = (KeycloakAuthenticationToken) super.authenticate(authentication);
+            KeycloakAuthenticationToken token = (KeycloakAuthenticationToken) super.authenticate(testToken);
             String username;
             UserDetails userDetails;
 
@@ -101,7 +135,7 @@ public class KeycloakUserDetailsAuthenticationProvider extends AtlasAbstractAuth
         } catch (Exception e) {
             LOG.debug("Keycloak Authentication Failed", e);
         }
-        if(isDebugEnabled) {
+        if (isDebugEnabled) {
             LOG.debug("<== AtlasKeycloakUserDetailsAuthenticationProvider getKeycloakAuthentication");
         }
         return authentication;
