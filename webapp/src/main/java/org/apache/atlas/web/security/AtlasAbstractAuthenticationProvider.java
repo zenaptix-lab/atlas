@@ -19,6 +19,7 @@
 
 package org.apache.atlas.web.security;
 
+import org.apache.atlas.web.security.token.KeycloakUserDetailsAuthenticationToken;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.security.Groups;
@@ -46,7 +47,8 @@ public abstract class AtlasAbstractAuthenticationProvider extends KeycloakAuthen
 
     @Override
     public boolean supports(Class<?> authentication) {
-        return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
+//        return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
+        return KeycloakUserDetailsAuthenticationToken.class.isAssignableFrom(authentication);
     }
 
     /**

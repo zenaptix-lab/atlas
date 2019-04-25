@@ -17,6 +17,7 @@
  */
 package org.apache.atlas.web.security;
 
+import com.google.common.collect.ImmutableList;
 import org.apache.atlas.web.filters.ActiveServerFilter;
 import org.apache.atlas.web.filters.AtlasAuthenticationEntryPoint;
 import org.apache.atlas.web.filters.AtlasAuthenticationFilter;
@@ -29,6 +30,7 @@ import org.keycloak.adapters.springsecurity.AdapterDeploymentContextFactoryBean;
 import org.keycloak.adapters.springsecurity.KeycloakSecurityComponents;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -44,6 +46,9 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter;
 import org.springframework.security.web.util.matcher.RequestHeaderRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.inject.Inject;
 import java.util.LinkedHashMap;
@@ -142,7 +147,9 @@ public class AtlasSecurityConfig extends WebSecurityConfigurerAdapter {
                 .headers().disable()
                 .servletApi()
                 .and()
-                .csrf().disable()
+                .cors()
+//                .csrf().disable()
+                .and()
                 .sessionManagement()
                 .enableSessionUrlRewriting(false)
                 .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
@@ -154,7 +161,7 @@ public class AtlasSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/login.jsp")
-                .loginProcessingUrl("/j_spring_security_check")
+                .loginProcessingUrl("http://localhost:8080/auth/realms/master/protocol/openid-connect/token")
                 .successHandler(successHandler)
                 .failureHandler(failureHandler)
                 .usernameParameter("j_username")
@@ -182,5 +189,22 @@ public class AtlasSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(ssoAuthenticationFilter, BasicAuthenticationFilter.class)
                 .addFilterAfter(atlasAuthenticationFilter, SecurityContextHolderAwareRequestFilter.class)
                 .addFilterAfter(csrfPreventionFilter, AtlasAuthenticationFilter.class);
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        final CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(ImmutableList.of("*"));
+        configuration.setAllowedMethods(ImmutableList.of("HEAD",
+                "GET", "POST", "PUT", "DELETE", "PATCH"));
+        // setAllowCredentials(true) is important, otherwise:
+        // The value of the 'Access-Control-Allow-Origin' header in the response must not be the wildcard '*' when the request's credentials mode is 'include'.
+        configuration.setAllowCredentials(true);
+        // setAllowedHeaders is important! Without it, OPTIONS preflight request
+        // will fail with 403 Invalid CORS request
+        configuration.setAllowedHeaders(ImmutableList.of("Authorization", "Cache-Control", "Content-Type"));
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }

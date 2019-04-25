@@ -40,7 +40,7 @@
 
         <form-login
                 login-page="/login.jsp"
-                login-processing-url="/j_spring_security_check"
+                login-processing-url="http://localhost:8080/auth/realms/master/protocol/openid-connect/token"
                 authentication-success-handler-ref="atlasAuthenticationSuccessHandler"
                 authentication-failure-handler-ref="atlasAuthenticationFailureHandler"
                 username-parameter="j_username"

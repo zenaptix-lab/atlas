@@ -19,7 +19,7 @@
 
 //Define indexOf for IE
 if (!Array.prototype.indexOf) {
-    Array.prototype.indexOf = function(obj, start) {
+    Array.prototype.indexOf = function (obj, start) {
         for (var i = (start || 0); i < this.length; i++) {
             if (this[i] == obj) {
                 return i;
@@ -30,7 +30,7 @@ if (!Array.prototype.indexOf) {
 }
 
 if (!String.prototype.startsWith) {
-    String.prototype.startsWith = function(str, matchStr) {
+    String.prototype.startsWith = function (str, matchStr) {
         return str.lastIndexOf(matchStr, 0) === 0
     }
 }
@@ -56,25 +56,30 @@ function doLogin() {
             baseUrl = '/';
         }
     }
-    var url = baseUrl + 'j_spring_security_check';
+    // var url = baseUrl + 'http://localhost:8080/auth/realms/master/protocol/openid-connect/token';
+    var url = 'http://localhost:8080/auth/realms/master/protocol/openid-connect/token';
 
     $.ajax({
         data: {
-            j_username: userName,
-            j_password: passwd
+            username: userName,
+            password: passwd,
+            client_id: "atlas",
+            grant_type: "password"
         },
         url: url,
         type: 'POST',
         headers: {
-            "cache-control": "no-cache"
+            'Content-Type': 'application/x-www-form-urlencoded'
         },
-        success: function() {
+        success: function () {
+            console.log("**************************************************************************************");
             if (location.hash.length > 2)
                 window.location.replace('index.html' + location.hash);
             else
                 window.location.replace('index.html');
         },
-        error: function(jqXHR, textStatus, err) {
+        error: function (jqXHR, textStatus, err) {
+            console.log("########################################################################################");
             $('#signIn').removeAttr('disabled');
             $('#signInLoading').css("visibility", "hidden");
 
@@ -109,19 +114,20 @@ function getBaseUrl() {
     return window.location.origin + window.location.pathname.substring(window.location.pathname
         .indexOf('/', 2) + 1, 0);
 }
-$(function() {
+
+$(function () {
     // register handlers
     if (!('placeholder' in HTMLInputElement.prototype)) {
         $("#username , #password").placeholder();
     }
-    $('#signIn').on('click', function() {
+    $('#signIn').on('click', function () {
         $('#signIn').attr('disabled', true);
         $('#signInLoading').css("visibility", "visible");
         doLogin();
         return false;
     });
-    $('#loginForm').each(function() {
-        $('input').keypress(function(e) {
+    $('#loginForm').each(function () {
+        $('input').keypress(function (e) {
             // Enter pressed?
             if (e.which == 10 || e.which == 13) {
                 doLogin();
@@ -129,7 +135,7 @@ $(function() {
         });
     });
 
-    $('#loginForm  li[class^=control-group] > input').on('change', function(e) {
+    $('#loginForm  li[class^=control-group] > input').on('change', function (e) {
         if (e.target.value === '') {
             $(e.target).parent().addClass('error');
         } else {
