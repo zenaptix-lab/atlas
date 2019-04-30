@@ -20,7 +20,7 @@ define(['require'], function(require) {
     'use strict';
 
     var Messages = {
-        defaultErrorMessage: "Something went wrong",
+        defaultErrorMessage: "Something went wrong3",
         addSuccessMessage: " has been created successfully",
         addErrorMessage: " could not be Created",
         removeTag: "Remove Classification Assignment",

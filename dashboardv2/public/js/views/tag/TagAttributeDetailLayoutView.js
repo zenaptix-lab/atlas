@@ -83,7 +83,7 @@ define(['require',
                         });
                     } else {
                         Utils.notifyError({
-                            content: 'Something went wrong'
+                            content: 'Something went wrong2'
                         });
                     }
                     this.$('.fontLoader').hide();
